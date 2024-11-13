@@ -1,0 +1,10 @@
+main: com.ar.askgaming.pvpthings.PvpThings
+name: PvpThings
+version: 1.0
+author: AskGaming
+softdepend: [Citizens]
+description: A plugin that adds some pvp features to the game.
+commands:
+  pvp:
+    usage: /pvp <on|off>
+    permission: pvpthings.pvp
