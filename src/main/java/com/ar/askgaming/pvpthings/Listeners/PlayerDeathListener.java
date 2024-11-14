@@ -5,6 +5,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import com.ar.askgaming.pvpthings.PvpManager;
+import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -24,6 +26,7 @@ public class PlayerDeathListener implements Listener{
                 if (CitizensAPI.getNPCRegistry().isNPC(e.getEntity())) {
                     NPC npc = CitizensAPI.getNPCRegistry().getNPC(e.getEntity());
                     if (plugin.getPvpManager().getNpcPlayerLink().containsValue(npc)){
+                        
                         npc.destroy();
                         //Check if this must be treated as OfflinePlayer
                         Player p = (Player) plugin.getPvpManager().getNpcPlayerLink().entrySet().stream()
@@ -32,7 +35,9 @@ public class PlayerDeathListener implements Listener{
                             .findFirst()
                             .orElse(null);
                         plugin.getPvpManager().getNpcPlayerLink().remove(p);
-                        p.setHealth(0);
+
+                        PvpPlayer pvp = PvpManager.getPvpPlayer(p);
+                        pvp.setNpcKilled(true);
                     }
                 }
             } catch (Exception ex) {

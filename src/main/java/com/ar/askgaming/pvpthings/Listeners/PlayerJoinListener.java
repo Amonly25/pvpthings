@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.ar.askgaming.pvpthings.PvpManager;
+import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
 
 public class PlayerJoinListener implements Listener{
@@ -17,13 +18,16 @@ public class PlayerJoinListener implements Listener{
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
-        plugin.getPvpManager().loadOrCreatePvpPlayer(p);
+        PvpPlayer pvp = plugin.getPvpManager().loadOrCreatePvpPlayer(p);
 
         PvpManager manager = plugin.getPvpManager();
 
         if (manager.getNpcPlayerLink().containsKey(p)){
             manager.switchFromNpc(p);
+        } 
+        if (pvp.isNpcKilled()){
+            p.setHealth(0);
+            pvp.setNpcKilled(false);
         }
-        
     }
 }

@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.w3c.dom.Attr;
 
 public class Commands implements TabExecutor{
 
@@ -38,11 +40,14 @@ public class Commands implements TabExecutor{
             case "spawn":
                 spawnZombie(p,args);
                 break;
+            case "despawn":
+                plugin.getDspTest().remove();
+                break;
             case "get_vel":
-                spawnZombie(p,args);
+                getVel(p,args);
                 break;
             case "set_vel":
-                spawnZombie(p,args);
+                setVel(p, args);
                 break;
             case "test":
                 test(p,args);
@@ -72,9 +77,33 @@ public class Commands implements TabExecutor{
     public void test(Player p, String[] args) {
         p.sendMessage("Test command");
         ItemStack i = p.getInventory().getItemInMainHand();
-        ItemMeta meta = i.getItemMeta();
-        if (meta.getAttributeModifiers() != null){
-            p.sendMessage(meta.getAttributeModifiers().toString());
+        if (i == null || i.getType() == Material.AIR) {
+            p.sendMessage("No item in hand");
+            return;
+
         }
+        ItemMeta meta = i.getItemMeta();
+        
+        p.sendMessage(String.valueOf(getAttackSpeed(i)));
+    }
+    public static double getAttackSpeed(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) {
+            return 0.0; // o algún valor predeterminado
+        }
+        
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null || !meta.hasAttributeModifiers()) {
+            return 0.0; // o algún valor predeterminado
+        }
+        
+        double baseAttackSpeed = 4.0; // Velocidad de ataque base en Minecraft
+        double totalModifier = 0.0;
+
+        // Obtener los modificadores de atributo para la velocidad de ataque
+        for (AttributeModifier modifier : meta.getAttributeModifiers(Attribute.ATTACK_SPEED)) {
+            totalModifier += modifier.getAmount();
+        }
+
+        return baseAttackSpeed + totalModifier;
     }
 }

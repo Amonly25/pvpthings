@@ -32,6 +32,7 @@ public class PvpManager {
         this.plugin = plugin;
 
         npcPlayerLink = new LinkedHashMap<>();
+        pvpPlayers = new LinkedHashMap<>();
     }
 
     public static PvpPlayer getPvpPlayer(Player p){
@@ -53,7 +54,7 @@ public class PvpManager {
             NPC npc = registry.createNPC(EntityType.PLAYER, p.getName());
     
             npc.spawn(p.getLocation());
-            npc.setName(p.getName());
+            npc.setName(p.getName() + " (NPC)");
             //npc.getEntity().setGlowing(true);   
 
             npc.getOrAddTrait(net.citizensnpcs.api.trait.trait.Inventory.class).setContents(p.getInventory().getContents());
@@ -88,6 +89,7 @@ public class PvpManager {
         NPC npc = getNpcPlayerLink().get(p);
         npc.data().setPersistent(NPC.Metadata.DROPS_ITEMS,false);
 
+        p.teleport(npc.getEntity().getLocation());
         p.getInventory().setContents(npc.getOrAddTrait(net.citizensnpcs.api.trait.trait.Inventory.class).getContents());
         p.getInventory().setItemInMainHand(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.HAND));
         p.getInventory().setItemInOffHand(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.OFF_HAND));

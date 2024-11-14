@@ -8,6 +8,9 @@ public class PvpPlayer {
     private Player player;
 
     private OfflinePlayer offlinePlayer;
+
+    private boolean npcKilled;
+
     private int kills;
     private int deaths;
     private int killstreak;
@@ -33,5 +36,11 @@ public class PvpPlayer {
     }
     public Player getPlayer() {
         return player;
+    }
+    public boolean isNpcKilled() {
+        return npcKilled;
+    }
+    public void setNpcKilled(boolean npcKilled) {
+        this.npcKilled = npcKilled;
     }
 }
