@@ -2,6 +2,7 @@ main: com.ar.askgaming.pvpthings.PvpThings
 name: PvpThings
 version: 1.0
 author: AskGaming
+api-version: 1.21
 softdepend: [Citizens]
 description: A plugin that adds some pvp features to the game.
 commands:

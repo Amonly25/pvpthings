@@ -6,9 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.ar.askgaming.pvpthings.PvpManager;
 import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
+import com.ar.askgaming.pvpthings.Managers.PvpManager;
 
 
 public class PlayerQuitListener implements Listener {

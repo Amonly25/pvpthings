@@ -4,14 +4,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ar.askgaming.pvpthings.Listeners.EntityDamageByEntityListener;
+import com.ar.askgaming.pvpthings.Listeners.InventoryClickListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerDeathListener;
+import com.ar.askgaming.pvpthings.Listeners.PlayerInteractListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerJoinListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerQuitListener;
+import com.ar.askgaming.pvpthings.Managers.PvpManager;
+import com.ar.askgaming.pvpthings.Utilities.Dps;
+import com.ar.askgaming.pvpthings.Utilities.PvpInfo;
+import com.ar.askgaming.pvpthings.Utilities.Recipes;
 
 public class PvpThings extends JavaPlugin {
     
     private PvpManager pvpManager;
-    private DpsTest dspTest;
+    private Dps dspTest;
+    private Recipes recipes;
+    private PvpInfo pvpInfo;
 
     private boolean citizensEnabled;
 
@@ -20,7 +28,10 @@ public class PvpThings extends JavaPlugin {
         saveDefaultConfig();
 
         pvpManager = new PvpManager(this);
-        dspTest = new DpsTest(this);
+        dspTest = new Dps(this);
+        recipes = new Recipes(this);
+        pvpInfo = new PvpInfo(this);
+        recipes.add();
 
         getServer().getPluginCommand("pvp").setExecutor(new Commands(this));
 
@@ -28,6 +39,8 @@ public class PvpThings extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
 
         if (getServer().getPluginManager().getPlugin("Citizens") != null) {
             citizensEnabled = true;
@@ -41,7 +54,7 @@ public class PvpThings extends JavaPlugin {
     }
 
     public void onDisable() {
-        getDspTest().remove();
+        getDpsTest().remove();
     }
     public boolean isCitizensEnabled() {
         return citizensEnabled;
@@ -49,7 +62,10 @@ public class PvpThings extends JavaPlugin {
     public PvpManager getPvpManager() {
         return pvpManager;
     }
-    public DpsTest getDspTest() {
+    public Dps getDpsTest() {
         return dspTest;
+    }
+    public PvpInfo getPvpInfo() {
+        return pvpInfo;
     }
 }

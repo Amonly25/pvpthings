@@ -1,4 +1,4 @@
-package com.ar.askgaming.pvpthings;
+package com.ar.askgaming.pvpthings.Managers;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -7,6 +7,9 @@ import java.util.Set;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+
+import com.ar.askgaming.pvpthings.PvpPlayer;
+import com.ar.askgaming.pvpthings.PvpThings;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.ai.goals.TargetNearbyEntityGoal;

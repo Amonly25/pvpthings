@@ -40,8 +40,11 @@ public class Commands implements TabExecutor{
             case "spawn":
                 spawnZombie(p,args);
                 break;
+            case "info":
+                p.openInventory(plugin.getPvpInfo().getInventory());
+                break;
             case "despawn":
-                plugin.getDspTest().remove();
+                plugin.getDpsTest().remove();
                 break;
             case "get_vel":
                 getVel(p,args);
@@ -58,7 +61,7 @@ public class Commands implements TabExecutor{
         return false;
     }
     public void spawnZombie(Player p, String[] args) {
-        plugin.getDspTest().spawn(p);
+        plugin.getDpsTest().spawn(p);
         p.sendMessage("Zombie spawned");
     }
     public void getVel(Player p, String[] args) {
@@ -75,35 +78,7 @@ public class Commands implements TabExecutor{
         }
     }
     public void test(Player p, String[] args) {
-        p.sendMessage("Test command");
-        ItemStack i = p.getInventory().getItemInMainHand();
-        if (i == null || i.getType() == Material.AIR) {
-            p.sendMessage("No item in hand");
-            return;
 
-        }
-        ItemMeta meta = i.getItemMeta();
-        
-        p.sendMessage(String.valueOf(getAttackSpeed(i)));
     }
-    public static double getAttackSpeed(ItemStack item) {
-        if (item == null || !item.hasItemMeta()) {
-            return 0.0; // o algún valor predeterminado
-        }
-        
-        ItemMeta meta = item.getItemMeta();
-        if (meta == null || !meta.hasAttributeModifiers()) {
-            return 0.0; // o algún valor predeterminado
-        }
-        
-        double baseAttackSpeed = 4.0; // Velocidad de ataque base en Minecraft
-        double totalModifier = 0.0;
 
-        // Obtener los modificadores de atributo para la velocidad de ataque
-        for (AttributeModifier modifier : meta.getAttributeModifiers(Attribute.ATTACK_SPEED)) {
-            totalModifier += modifier.getAmount();
-        }
-
-        return baseAttackSpeed + totalModifier;
-    }
 }
