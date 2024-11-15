@@ -8,7 +8,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
-import com.ar.askgaming.pvpthings.Managers.PvpManager;
 
 
 public class PlayerQuitListener implements Listener {
@@ -20,7 +19,7 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-        PvpPlayer p = PvpManager.getPvpPlayer(player);
+        PvpPlayer p = plugin.getPvpManager().getPvpPlayer(player);
         if (p.isInCombat()) {
             p.setInCombat(false);
             if (plugin.isCitizensEnabled() && plugin.getPvpManager().createNpcPlayerLink(player)){

@@ -7,7 +7,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
-import com.ar.askgaming.pvpthings.Managers.PvpManager;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
@@ -36,7 +35,7 @@ public class PlayerDeathListener implements Listener{
                             .orElse(null);
                         plugin.getPvpManager().getNpcPlayerLink().remove(p);
 
-                        PvpPlayer pvp = PvpManager.getPvpPlayer(p);
+                        PvpPlayer pvp = plugin.getPvpManager().getPvpPlayer(p);
                         pvp.setNpcKilled(true);
                     }
                 }

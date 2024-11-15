@@ -1,10 +1,14 @@
 package com.ar.askgaming.pvpthings.Managers;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -21,9 +25,13 @@ import net.citizensnpcs.trait.AttributeTrait;
 
 public class PvpManager {
 
-    private static HashMap<Player, PvpPlayer> pvpPlayers;
+    private HashMap<Player, PvpPlayer> pvpPlayers = new LinkedHashMap<>();
     
-    private HashMap<Player, NPC> npcPlayerLink;
+    public HashMap<Player, PvpPlayer> getPvpPlayers() {
+        return pvpPlayers;
+    }
+
+    private HashMap<Player, NPC> npcPlayerLink = new LinkedHashMap<>();
     
     public HashMap<Player, NPC> getNpcPlayerLink() {
         return npcPlayerLink;
@@ -34,11 +42,18 @@ public class PvpManager {
     public PvpManager(PvpThings plugin) {
         this.plugin = plugin;
 
-        npcPlayerLink = new LinkedHashMap<>();
-        pvpPlayers = new LinkedHashMap<>();
+        File folder = new File(plugin.getDataFolder(), "/playerdata");
+
+        if (!folder.exists() || !folder.isDirectory()) {
+            return;
+        }
+
+        Bukkit.getOnlinePlayers().forEach(p -> {
+            loadOrCreatePvpPlayer(p);
+        });
     }
 
-    public static PvpPlayer getPvpPlayer(Player p){
+    public PvpPlayer getPvpPlayer(Player p){
         return pvpPlayers.getOrDefault(p, null);
     }
 
@@ -46,8 +61,20 @@ public class PvpManager {
         if (pvpPlayers.containsKey(p)) {
             return pvpPlayers.get(p);
         }
-        PvpPlayer pvp = new PvpPlayer(p);
+        File file = new File(plugin.getDataFolder() + "/playerdata", p.getUniqueId() + ".yml");
+
+        if (!file.exists()) {
+            PvpPlayer pvp = new PvpPlayer(p);
+            pvpPlayers.put(p, pvp);
+            return pvp;
+        }
+
+        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+        PvpPlayer pvp = (PvpPlayer) config.get(p.getUniqueId().toString());
+        pvp.setFile(file);
+        pvp.setConfig(config);
         pvpPlayers.put(p, pvp);
+
         return pvp;
 
     }

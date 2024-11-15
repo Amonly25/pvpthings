@@ -1,12 +1,12 @@
 package com.ar.askgaming.pvpthings;
 
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ar.askgaming.pvpthings.Listeners.EntityDamageByEntityListener;
 import com.ar.askgaming.pvpthings.Listeners.InventoryClickListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerDeathListener;
-import com.ar.askgaming.pvpthings.Listeners.PlayerInteractListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerJoinListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerQuitListener;
 import com.ar.askgaming.pvpthings.Managers.PvpManager;
@@ -27,6 +27,8 @@ public class PvpThings extends JavaPlugin {
         
         saveDefaultConfig();
 
+        ConfigurationSerialization.registerClass(PvpPlayer.class,"PvpPlayer");
+
         pvpManager = new PvpManager(this);
         dspTest = new Dps(this);
         recipes = new Recipes(this);
@@ -39,7 +41,6 @@ public class PvpThings extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
 
         if (getServer().getPluginManager().getPlugin("Citizens") != null) {
@@ -54,7 +55,10 @@ public class PvpThings extends JavaPlugin {
     }
 
     public void onDisable() {
-        getDpsTest().remove();
+        if (getDps().getZombie() != null) {
+            getDps().getZombie().remove();
+
+        }
     }
     public boolean isCitizensEnabled() {
         return citizensEnabled;
@@ -62,7 +66,7 @@ public class PvpThings extends JavaPlugin {
     public PvpManager getPvpManager() {
         return pvpManager;
     }
-    public Dps getDpsTest() {
+    public Dps getDps() {
         return dspTest;
     }
     public PvpInfo getPvpInfo() {

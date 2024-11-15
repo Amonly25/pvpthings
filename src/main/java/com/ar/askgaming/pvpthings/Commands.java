@@ -2,16 +2,11 @@ package com.ar.askgaming.pvpthings;
 
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.w3c.dom.Attr;
 
 public class Commands implements TabExecutor{
 
@@ -44,7 +39,7 @@ public class Commands implements TabExecutor{
                 p.openInventory(plugin.getPvpInfo().getInventory());
                 break;
             case "despawn":
-                plugin.getDpsTest().remove();
+                plugin.getDps().remove();
                 break;
             case "get_vel":
                 getVel(p,args);
@@ -52,16 +47,13 @@ public class Commands implements TabExecutor{
             case "set_vel":
                 setVel(p, args);
                 break;
-            case "test":
-                test(p,args);
-                break;
             default:
                 break;
         }
         return false;
     }
     public void spawnZombie(Player p, String[] args) {
-        plugin.getDpsTest().spawn(p);
+        plugin.getDps().spawn(p);
         p.sendMessage("Zombie spawned");
     }
     public void getVel(Player p, String[] args) {
@@ -77,8 +69,4 @@ public class Commands implements TabExecutor{
             // TODO: handle exception
         }
     }
-    public void test(Player p, String[] args) {
-
-    }
-
 }

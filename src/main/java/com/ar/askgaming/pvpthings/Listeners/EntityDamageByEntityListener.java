@@ -7,15 +7,12 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
 import com.ar.askgaming.pvpthings.Managers.PvpManager;
 
 import net.citizensnpcs.api.CitizensAPI;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class EntityDamageByEntityListener implements Listener{
 
@@ -39,14 +36,14 @@ public class EntityDamageByEntityListener implements Listener{
         if (e.getDamager() instanceof Player){
             Player p = (Player) e.getDamager();
 
-            plugin.getDpsTest().setSpeedAttack(p);
+            plugin.getDps().setSpeedAttack(p);
 
             if (e.getEntity() instanceof Zombie) {
                 Zombie zombie = (Zombie) e.getEntity();
-                if (zombie.equals(plugin.getDpsTest().getZombie())) {
+                if (zombie.equals(plugin.getDps().getZombie())) {
                     zombie.setHealth(1000);
                     double damage = e.getDamage();
-                    plugin.getDpsTest().get(p, damage);
+                    plugin.getDps().get(p, damage);
                 }
                 return;
             }          
@@ -68,8 +65,9 @@ public class EntityDamageByEntityListener implements Listener{
             } else {return;}
         } else {return;}
 
-        PvpPlayer pDamager = PvpManager.getPvpPlayer(damager);
-        PvpPlayer pDamaged = PvpManager.getPvpPlayer(damaged);
+        PvpManager manager = plugin.getPvpManager();
+        PvpPlayer pDamager = manager.getPvpPlayer(damager);
+        PvpPlayer pDamaged =manager.getPvpPlayer(damaged);
         if (!pDamager.isInCombat()) {
             if (e.isCancelled()){
                 return;
