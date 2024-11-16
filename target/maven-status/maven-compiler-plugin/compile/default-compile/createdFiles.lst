@@ -1,5 +1,5 @@
+com\ar\askgaming\pvpthings\Commands\ContractsCommand.class
 com\ar\askgaming\pvpthings\Utilities\PvpInfo.class
-com\ar\askgaming\pvpthings\Commands.class
 com\ar\askgaming\pvpthings\PvpThings.class
 com\ar\askgaming\pvpthings\Listeners\InventoryClickListener.class
 com\ar\askgaming\pvpthings\Utilities\Dps.class
@@ -10,7 +10,9 @@ com\ar\askgaming\pvpthings\Utilities\Logs.class
 com\ar\askgaming\pvpthings\Managers\DataManager.class
 com\ar\askgaming\pvpthings\Listeners\EntityDamageByEntityListener.class
 com\ar\askgaming\pvpthings\Listeners\PlayerQuitListener.class
+com\ar\askgaming\pvpthings\Managers\ContractManager.class
 com\ar\askgaming\pvpthings\Managers\PvpManager.class
 com\ar\askgaming\pvpthings\Contracts\Contract.class
 com\ar\askgaming\pvpthings\Listeners\PlayerJoinListener.class
+com\ar\askgaming\pvpthings\Commands\PvpCommand.class
 com\ar\askgaming\pvpthings\Listeners\PlayerDeathListener.class

@@ -1,10 +1,12 @@
-C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Commands.java
+C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Commands\ContractsCommand.java
+C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Commands\PvpCommand.java
 C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Contracts\Contract.java
 C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Listeners\EntityDamageByEntityListener.java
 C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Listeners\InventoryClickListener.java
 C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Listeners\PlayerDeathListener.java
 C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Listeners\PlayerJoinListener.java
 C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Listeners\PlayerQuitListener.java
+C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Managers\ContractManager.java
 C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Managers\DataManager.java
 C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\Managers\PvpManager.java
 C:\Users\Luisito\Desktop\vs_code\pvpthings\src\main\java\com\ar\askgaming\pvpthings\PvpPlayer.java

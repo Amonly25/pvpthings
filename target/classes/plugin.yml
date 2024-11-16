@@ -7,5 +7,7 @@ softdepend: [Citizens]
 description: A plugin that adds some pvp features to the game.
 commands:
   pvp:
-    usage: /pvp <on|off>
     permission: pvpthings.pvp
+  contract:
+    permission: pvpthings.contract
+    aliases: [bounty,contracts]

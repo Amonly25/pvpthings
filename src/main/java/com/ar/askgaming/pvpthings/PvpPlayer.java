@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -26,6 +27,7 @@ public class PvpPlayer implements ConfigurationSerializable{
         this.npcKilled = false;
         this.kdr = 0;
         this.headPrice = 0.0;
+        this.lastDeathLocation = null;
 
         file = new File(plugin.getDataFolder() + "/playerdata", player.getUniqueId() + ".yml");
 
@@ -63,6 +65,10 @@ public class PvpPlayer implements ConfigurationSerializable{
         this.npcKilled = (boolean) map.get("npcKilled");
         this.kdr = (int) map.get("kdr");
         this.headPrice = (double) map.get("headPrice");
+
+        if (map.containsKey("lastDeathLocation")) {
+            this.lastDeathLocation = (Location) map.get("lastDeathLocation");
+        }
     }
     @Override
     public Map<String, Object> serialize() {
@@ -76,6 +82,7 @@ public class PvpPlayer implements ConfigurationSerializable{
         map.put("npcKilled", npcKilled);
         map.put("kdr", kdr);
         map.put("headPrice", headPrice);
+        map.put("lastDeathLocation", lastDeathLocation);
 
         return map;
     }
@@ -89,7 +96,15 @@ public class PvpPlayer implements ConfigurationSerializable{
     private boolean inCombat;
     private int kdr;
     private double headPrice;
+    private Location lastDeathLocation;
 
+    public Location getLastDeathLocation() {
+        return lastDeathLocation;
+    }
+    public void setLastDeathLocation(Location lastDeathLocation) {
+        this.lastDeathLocation = lastDeathLocation;
+        save();
+    }
     public int getKdr() {
         return kdr;
     }

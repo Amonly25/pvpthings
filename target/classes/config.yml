@@ -1,3 +1,9 @@
 utilities:
   enchanted_golden_apple_recipe: true
-  
+
+logs:
+  enable: true
+  cause: true
+  inventory: true
+
+pvp_info:

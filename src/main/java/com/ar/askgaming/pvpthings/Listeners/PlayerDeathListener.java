@@ -37,12 +37,17 @@ public class PlayerDeathListener implements Listener{
 
                         PvpPlayer pvp = plugin.getPvpManager().getPvpPlayer(p);
                         pvp.setNpcKilled(true);
+                        return;
                     }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
-                //Handle 
+                return;
             }
         }
+        Player pl = e.getEntity();
+        PvpPlayer pvpl = plugin.getPvpManager().getPvpPlayer(pl);
+        //pvp.setDeaths(pvp.getDeaths() + 1);
+        pvpl.setLastDeathLocation(pl.getLocation());
     }
 }

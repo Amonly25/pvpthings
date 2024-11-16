@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -23,6 +24,7 @@ public class PvpInfo {
         List<String> cooldownLore = List.of("El pvp es similiar a la 1.8",
         "Tiene cooldown indetectable, pero suficiente para impedir autoclickers.",
         "Puedes probar el daño por segundo en el spawn.");
+        
         addItem(Material.DIAMOND_SWORD, 9, "Cooldown Pvp", cooldownLore);
 
         List<String> dpsLore = List.of("El acha posee una velocidad menor a la espada", 
@@ -47,6 +49,9 @@ public class PvpInfo {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
         meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+
         item.setItemMeta(meta);
         inventory.setItem(slot, item);
 
