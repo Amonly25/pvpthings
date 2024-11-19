@@ -17,7 +17,13 @@ public class InventoryClickListener implements Listener{
     public void onInventoryClick(InventoryClickEvent e) {
 
         Inventory inv = plugin.getPvpInfo().getInventory();
-        if (e.getInventory().equals(inv) || e.getClickedInventory().equals(inv)) {
+        Inventory inventory = e.getInventory();
+        Inventory clickedInventory = e.getClickedInventory();
+
+        if (inventory != null && inventory.equals(inv)) {
+            e.setCancelled(true);
+        }
+        if (clickedInventory != null && clickedInventory.equals(inv)) {
             e.setCancelled(true);
         }
     }

@@ -19,7 +19,7 @@ public class PvpCommand implements TabExecutor{
     }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return List.of("spawn");
+        return List.of("spawn_zombie", "info", "despawn_zombie", "back");
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

@@ -30,8 +30,8 @@ public class Contract implements ConfigurationSerializable {
     public Map<String, Object> serialize() {
         return Map.of(
             "price", price,
-            "hunted", hunted,
-            "hunter", hunter,
+            "hunted", hunted.toString(),
+            "hunter", hunter.toString(),
             "time", time
         );
     }

@@ -2,7 +2,9 @@ package com.ar.askgaming.pvpthings.Managers;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -11,6 +13,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
@@ -22,8 +25,10 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.npc.NPCRegistry;
 import net.citizensnpcs.api.trait.trait.Equipment;
 import net.citizensnpcs.trait.AttributeTrait;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
-public class PvpManager {
+public class PvpManager extends BukkitRunnable{
 
     private HashMap<Player, PvpPlayer> pvpPlayers = new LinkedHashMap<>();
     
@@ -54,7 +59,7 @@ public class PvpManager {
     }
 
     public PvpPlayer getPvpPlayer(Player p){
-        return pvpPlayers.getOrDefault(p, null);
+        return pvpPlayers.getOrDefault(p, loadOrCreatePvpPlayer(p));
     }
 
     public PvpPlayer loadOrCreatePvpPlayer(Player p) {
@@ -73,6 +78,7 @@ public class PvpManager {
         PvpPlayer pvp = (PvpPlayer) config.get(p.getUniqueId().toString());
         pvp.setFile(file);
         pvp.setConfig(config);
+        pvp.setPlayer(p);
         pvpPlayers.put(p, pvp);
 
         return pvp;
@@ -88,7 +94,6 @@ public class PvpManager {
             //npc.getEntity().setGlowing(true);   
 
             npc.getOrAddTrait(net.citizensnpcs.api.trait.trait.Inventory.class).setContents(p.getInventory().getContents());
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.HAND, p.getInventory().getItemInMainHand());
             npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, p.getInventory().getItemInOffHand());
             npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.HELMET, p.getInventory().getHelmet());
             npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.CHESTPLATE, p.getInventory().getChestplate());
@@ -116,12 +121,14 @@ public class PvpManager {
     }
 
     public void switchFromNpc(Player p) {
+
         NPC npc = getNpcPlayerLink().get(p);
+        if (npc == null) return;
+
         npc.data().setPersistent(NPC.Metadata.DROPS_ITEMS,false);
 
         p.teleport(npc.getEntity().getLocation());
         p.getInventory().setContents(npc.getOrAddTrait(net.citizensnpcs.api.trait.trait.Inventory.class).getContents());
-        p.getInventory().setItemInMainHand(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.HAND));
         p.getInventory().setItemInOffHand(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.OFF_HAND));
         p.getInventory().setHelmet(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.HELMET));
         p.getInventory().setChestplate(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.CHESTPLATE));
@@ -129,5 +136,49 @@ public class PvpManager {
         p.getInventory().setBoots(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.BOOTS));
 
         npc.destroy();
+        npcPlayerLink.remove(p);
+    }
+    private HashMap<Player, Integer> lastCombat = new HashMap<>();
+
+    public void setLastCombat(Player p, int time){
+        PvpPlayer pvp = getPvpPlayer(p);
+        pvp.setInCombat(true);
+        if (!lastCombat.containsKey(p)){
+            p.sendMessage(plugin.getLang().get("enter_combat",p));
+        }
+        lastCombat.put(p, time);
+    }
+
+    @Override
+    public void run() {
+        if (lastCombat.isEmpty()) return;
+
+        Iterator<Entry<Player, Integer>> recorrer = lastCombat.entrySet().iterator();
+        
+        while (recorrer.hasNext()) {
+            
+            Entry<Player, Integer> entry = recorrer.next();
+            
+            Player player = entry.getKey();
+            int time = entry.getValue();
+            
+            if (time >= 1) {
+                String s = plugin.getLang().get("in_combat", player).replace("{time}", String.valueOf(time));
+                sendActionBar(player, s);
+                lastCombat.put(player, time - 1);
+            }
+            
+            if (time == 0) {
+                recorrer.remove();
+                PvpPlayer pvp = getPvpPlayer(player);
+                pvp.setInCombat(false);
+                String s = plugin.getLang().get("leave_combat", player);
+                player.sendMessage(s);
+                sendActionBar(player, s);
+            }
+        }
+    }
+    private void sendActionBar(Player p, String message){
+        p.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(message));
     }
 }

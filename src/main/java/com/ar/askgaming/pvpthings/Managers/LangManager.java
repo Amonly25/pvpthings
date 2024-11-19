@@ -11,10 +11,10 @@ import org.bukkit.entity.Player;
 
 import com.ar.askgaming.pvpthings.PvpThings;
 
-public class DataManager {
+public class LangManager {
 
     private PvpThings plugin;
-    public DataManager(PvpThings plugin) {
+    public LangManager(PvpThings plugin) {
         this.plugin = plugin;
 
         File protectionsFolder = new File(plugin.getDataFolder() + "/playerdata");
@@ -32,7 +32,7 @@ public class DataManager {
             plugin.saveResource("lang/es.yml", false);
         }
     }
-    public String getLang(String path, Player p) {
+    public String get(String path, Player p) {
 
         File file = new File(plugin.getDataFolder() + "/lang/" + p.getLocale().split("_")[0] + ".yml");
         String required = "";
@@ -86,7 +86,7 @@ public class DataManager {
     }
     public void langBroadcast(String path) {
         for (Player p : plugin.getServer().getOnlinePlayers()) {
-            p.sendMessage(getLang(path, p));
+            p.sendMessage(get(path, p));
         }
     }
 }

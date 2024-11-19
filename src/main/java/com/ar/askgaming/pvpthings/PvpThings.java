@@ -13,6 +13,7 @@ import com.ar.askgaming.pvpthings.Listeners.PlayerDeathListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerJoinListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerQuitListener;
 import com.ar.askgaming.pvpthings.Managers.ContractManager;
+import com.ar.askgaming.pvpthings.Managers.LangManager;
 import com.ar.askgaming.pvpthings.Managers.PvpManager;
 import com.ar.askgaming.pvpthings.Utilities.Dps;
 import com.ar.askgaming.pvpthings.Utilities.Logs;
@@ -27,6 +28,7 @@ public class PvpThings extends JavaPlugin {
     private PvpInfo pvpInfo;
     private Logs logs;
     private ContractManager contractManager;
+    private LangManager lang;
 
     private boolean citizensEnabled;
 
@@ -36,8 +38,9 @@ public class PvpThings extends JavaPlugin {
 
         ConfigurationSerialization.registerClass(PvpPlayer.class,"PvpPlayer");
         ConfigurationSerialization.registerClass(Contract.class,"Contract");
-
+        lang = new LangManager(this);
         pvpManager = new PvpManager(this);
+        pvpManager.runTaskTimer(this, 0, 20);
         contractManager = new ContractManager(this);
         dspTest = new Dps(this);
         recipes = new Recipes(this);
@@ -86,5 +89,8 @@ public class PvpThings extends JavaPlugin {
     }
     public ContractManager getContractManager() {
         return contractManager;
+    }
+    public LangManager getLang() {
+        return lang;
     }
 }

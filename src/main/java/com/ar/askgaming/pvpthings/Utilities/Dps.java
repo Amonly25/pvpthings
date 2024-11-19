@@ -68,6 +68,12 @@ public class Dps {
         ItemStack i = player.getInventory().getItemInMainHand();
         if (i == null || i.getType() == Material.AIR) return;
 
+        if (i.getType().equals(Material.MACE)){
+            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4);
+            //player.sendMessage("Speed attack set to 4");
+            return;
+        }
+
         if (axes.contains(i.getType())){
             player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(8);
             //player.sendMessage("Speed attack set to 8");

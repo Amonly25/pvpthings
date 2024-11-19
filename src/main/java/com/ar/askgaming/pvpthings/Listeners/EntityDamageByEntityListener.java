@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
@@ -21,7 +22,7 @@ public class EntityDamageByEntityListener implements Listener{
         this.plugin = plugin;
     }
     
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 
         if (plugin.isCitizensEnabled()){
@@ -66,33 +67,33 @@ public class EntityDamageByEntityListener implements Listener{
         } else {return;}
 
         PvpManager manager = plugin.getPvpManager();
+
         PvpPlayer pDamager = manager.getPvpPlayer(damager);
-        PvpPlayer pDamaged =manager.getPvpPlayer(damaged);
-        if (!pDamager.isInCombat()) {
-            if (e.isCancelled()){
+        PvpPlayer pDamaged = manager.getPvpPlayer(damaged);
+
+        if (pDamaged.isInCombat()) {
+            if (e.isCancelled()) {
+                e.setCancelled(false);
+            }
+            
+        } else {
+            if (e.isCancelled()) {
                 return;
             }
-            pDamager.setInCombat(true);
-            damager.sendMessage("You are now in combat!");
-            timer(pDamager);
         }
-        if (!pDamaged.isInCombat()) {
-            if (e.isCancelled()){
-                return;
-            }
-            pDamaged.setInCombat(true);
-            damaged.sendMessage("You are now in combat!");
-            timer(pDamaged);
-        }
+
+        manager.setLastCombat(damager, 15);
+        manager.setLastCombat(damaged, 15);
+        // Tu lógica de combate aquí
+        // if (!pDamager.isInCombat()) {
+        //     manager.setLastCombat(damager, now);
+        // }
+
+        // if (!pDamaged.isInCombat()) {
+        //     pDamaged.setInCombat(true);
+        //     damaged.sendMessage("You are now in combat!");
+        //     timer(pDamaged);
+        // }
         
     } 
-    public void timer(PvpPlayer player) {
-        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-            @Override
-            public void run() {
-                player.setInCombat(false);
-                player.getPlayer().sendMessage("You are no longer in combat!");
-            }
-        }, 5 * 20L); // Convert seconds to ticks (20 ticks = 1 second)
-    }
 }

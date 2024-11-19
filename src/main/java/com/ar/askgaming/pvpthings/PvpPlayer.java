@@ -61,7 +61,6 @@ public class PvpPlayer implements ConfigurationSerializable{
         this.deaths = (int) map.get("deaths");
         this.killstreak = (int) map.get("killstreak");
         this.highestKillstreak = (int) map.get("highestKillstreak");
-        this.inCombat = (boolean) map.get("inCombat");
         this.npcKilled = (boolean) map.get("npcKilled");
         this.kdr = (int) map.get("kdr");
         this.headPrice = (double) map.get("headPrice");
@@ -78,7 +77,6 @@ public class PvpPlayer implements ConfigurationSerializable{
         map.put("deaths", deaths);
         map.put("killstreak", killstreak);
         map.put("highestKillstreak", highestKillstreak);
-        map.put("inCombat", inCombat);
         map.put("npcKilled", npcKilled);
         map.put("kdr", kdr);
         map.put("headPrice", headPrice);
@@ -93,7 +91,7 @@ public class PvpPlayer implements ConfigurationSerializable{
     private int deaths;
     private int killstreak;
     private int highestKillstreak;
-    private boolean inCombat;
+    private boolean inCombat = false;
     private int kdr;
     private double headPrice;
     private Location lastDeathLocation;
@@ -113,6 +111,9 @@ public class PvpPlayer implements ConfigurationSerializable{
     }
     public double getHeadPrice() {
         return headPrice;
+    }
+    public void setPlayer(Player player) {
+        this.player = player;
     }
     public void setHeadPrice(double headPrice) {
         this.headPrice = headPrice;

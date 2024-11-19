@@ -22,7 +22,7 @@ public class PlayerJoinListener implements Listener{
 
         PvpManager manager = plugin.getPvpManager();
 
-        if (manager.getNpcPlayerLink().containsKey(p)){
+        if (manager.getNpcPlayerLink().get(p) != null){
             manager.switchFromNpc(p);
         } 
         if (pvp.isNpcKilled()){
