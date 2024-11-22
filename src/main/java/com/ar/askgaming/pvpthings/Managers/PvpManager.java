@@ -5,41 +5,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
 
-import net.citizensnpcs.api.CitizensAPI;
-import net.citizensnpcs.api.ai.goals.TargetNearbyEntityGoal;
-import net.citizensnpcs.api.ai.goals.WanderGoal;
-import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.npc.NPCRegistry;
-import net.citizensnpcs.api.trait.trait.Equipment;
-import net.citizensnpcs.trait.AttributeTrait;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class PvpManager extends BukkitRunnable{
 
     private HashMap<Player, PvpPlayer> pvpPlayers = new LinkedHashMap<>();
-    
+
     public HashMap<Player, PvpPlayer> getPvpPlayers() {
         return pvpPlayers;
-    }
-
-    private HashMap<Player, NPC> npcPlayerLink = new LinkedHashMap<>();
-    
-    public HashMap<Player, NPC> getNpcPlayerLink() {
-        return npcPlayerLink;
     }
 
     private PvpThings plugin;
@@ -84,60 +68,7 @@ public class PvpManager extends BukkitRunnable{
         return pvp;
 
     }
-    public boolean createNpcPlayerLink(Player p){
-        try {
-            NPCRegistry registry = CitizensAPI.getNPCRegistry();
-            NPC npc = registry.createNPC(EntityType.PLAYER, p.getName());
-    
-            npc.spawn(p.getLocation());
-            npc.setName(p.getName() + " (NPC)");
-            //npc.getEntity().setGlowing(true);   
-
-            npc.getOrAddTrait(net.citizensnpcs.api.trait.trait.Inventory.class).setContents(p.getInventory().getContents());
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.OFF_HAND, p.getInventory().getItemInOffHand());
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.HELMET, p.getInventory().getHelmet());
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.CHESTPLATE, p.getInventory().getChestplate());
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.LEGGINGS, p.getInventory().getLeggings());
-            npc.getOrAddTrait(Equipment.class).set(Equipment.EquipmentSlot.BOOTS, p.getInventory().getBoots());
-            npc.getOrAddTrait(AttributeTrait.class).setAttributeValue(Attribute.MOVEMENT_SPEED, 0.75);
-           
-            npc.data().setPersistent(NPC.Metadata.DEFAULT_PROTECTED,false);
-            npc.data().setPersistent(NPC.Metadata.DROPS_ITEMS,true);
-
-            WanderGoal w = WanderGoal.builder(npc).build();
-            Set<EntityType> targetTypes = Set.of(EntityType.PLAYER, EntityType.ZOMBIE, EntityType.SKELETON, EntityType.CREEPER, EntityType.SPIDER, EntityType.ENDERMAN);
-            TargetNearbyEntityGoal g = TargetNearbyEntityGoal.builder(npc).aggressive(true).radius(10).targets(targetTypes).build();
-
-            npc.getDefaultGoalController().addGoal(w, 1);
-            npc.getDefaultGoalController().addGoal(g, 1);
-
-            npcPlayerLink.put(p, npc);
-            return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();    
-            return false;
-        }
-    }
-
-    public void switchFromNpc(Player p) {
-
-        NPC npc = getNpcPlayerLink().get(p);
-        if (npc == null) return;
-
-        npc.data().setPersistent(NPC.Metadata.DROPS_ITEMS,false);
-
-        p.teleport(npc.getEntity().getLocation());
-        p.getInventory().setContents(npc.getOrAddTrait(net.citizensnpcs.api.trait.trait.Inventory.class).getContents());
-        p.getInventory().setItemInOffHand(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.OFF_HAND));
-        p.getInventory().setHelmet(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.HELMET));
-        p.getInventory().setChestplate(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.CHESTPLATE));
-        p.getInventory().setLeggings(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.LEGGINGS));
-        p.getInventory().setBoots(npc.getOrAddTrait(Equipment.class).get(Equipment.EquipmentSlot.BOOTS));
-
-        npc.destroy();
-        npcPlayerLink.remove(p);
-    }
+ 
     private HashMap<Player, Integer> lastCombat = new HashMap<>();
 
     public void setLastCombat(Player p, int time){
@@ -151,6 +82,7 @@ public class PvpManager extends BukkitRunnable{
 
     @Override
     public void run() {
+
         if (lastCombat.isEmpty()) return;
 
         Iterator<Entry<Player, Integer>> recorrer = lastCombat.entrySet().iterator();
@@ -180,5 +112,27 @@ public class PvpManager extends BukkitRunnable{
     }
     private void sendActionBar(Player p, String message){
         p.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(message));
+    }
+    public HashMap<String, Integer> getTop(String type){
+        HashMap<String, Integer> map = new HashMap<>();
+        for (PvpPlayer pvp : pvpPlayers.values()) {
+            switch (type) {
+                case "kills":
+                    map.put(pvp.getPlayer().getName(), pvp.getKills());
+                    break;
+                case "deaths":
+                    map.put(pvp.getPlayer().getName(), pvp.getDeaths());
+                    break;
+                case "killstreak":
+                    map.put(pvp.getPlayer().getName(), pvp.getKillstreak());
+                    break;
+                case "kdr":
+                    map.put(pvp.getPlayer().getName(), pvp.getKdr());
+                    break;
+                default:
+                    break;
+            }
+        }
+        return map.keySet().stream().sorted((a,b) -> map.get(b).compareTo(map.get(a))).collect(HashMap::new, (m, c) -> m.put(c, map.get(c)), HashMap::putAll);
     }
 }

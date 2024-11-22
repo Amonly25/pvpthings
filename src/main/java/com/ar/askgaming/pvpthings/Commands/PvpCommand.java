@@ -1,8 +1,10 @@
 package com.ar.askgaming.pvpthings.Commands;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -19,7 +21,7 @@ public class PvpCommand implements TabExecutor{
     }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return List.of("spawn_zombie", "info", "despawn_zombie", "back");
+        return List.of("spawn_zombie", "info", "despawn_zombie", "back","stats","tops");
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -46,12 +48,12 @@ public class PvpCommand implements TabExecutor{
                 break;
             case "back":
                 back(p,args);
+            case "stats":
+                stats(p,args);
                 break;
-            case "get_vel":
-                getVel(p,args);
-                break;
-            case "set_vel":
-                setVel(p, args);
+            case "tops":
+            case "top":
+                tops(p,args);
                 break;
             default:
                 break;
@@ -62,23 +64,39 @@ public class PvpCommand implements TabExecutor{
         plugin.getDps().spawn(p);
         p.sendMessage("Zombie spawned");
     }
-    public void getVel(Player p, String[] args) {
-        p.sendMessage("Actual Attack speed: " + p.getAttribute(Attribute.ATTACK_SPEED).getValue());
-    }
-    public void setVel(Player p, String[] args) {
 
-        try {
-            int amount = Integer.parseInt(args[1]);
-            p.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(amount);
-            p.sendMessage("Attack speed set to: " + amount);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-    }
     public void back(Player p, String[] args) {
         PvpPlayer pvp = plugin.getPvpManager().loadOrCreatePvpPlayer(p);
         if (pvp.getLastDeathLocation() != null) {
             p.teleport(pvp.getLastDeathLocation());
         }
+    }
+    public void stats(Player p, String[] args) {
+        PvpPlayer pvp = plugin.getPvpManager().loadOrCreatePvpPlayer(p);
+        p.sendMessage("Kills: " + pvp.getKills());
+        p.sendMessage("Deaths: " + pvp.getDeaths());
+        p.sendMessage("K/D: " + pvp.getKdr());
+        p.sendMessage("Killstreak: " + pvp.getKillstreak());
+        p.sendMessage("Highest Killstreak: " + pvp.getHighestKillstreak());
+
+    }
+    public void tops(Player p, String[] args) {
+        if (args.length < 2) {
+            p.sendMessage("Usage: /pvp tops <kills/deaths/killstreak/kdr>");
+            return;
+        }
+
+        String type = args[1].toLowerCase();
+        List<String> validTypes = Arrays.asList("kills", "deaths", "killstreak", "kdr");
+
+        if (!validTypes.contains(type)) {
+            p.sendMessage("Usage: /pvp tops <kills/deaths/killstreak/kdr>");
+            return;
+        }
+
+        HashMap<String, Integer> map = plugin.getPvpManager().getTop(type);
+        List<String> list = new ArrayList<>();
+        map.entrySet().forEach(e -> list.add(e.getKey() + " - " + e.getValue() + " " + type));
+        plugin.getMethods().listTops(list, args, p, type);
     }
 }

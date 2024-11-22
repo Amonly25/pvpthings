@@ -1,4 +1,5 @@
 com\ar\askgaming\pvpthings\Commands\ContractsCommand.class
+com\ar\askgaming\pvpthings\Utilities\Methods.class
 com\ar\askgaming\pvpthings\Utilities\PvpInfo.class
 com\ar\askgaming\pvpthings\PvpThings.class
 com\ar\askgaming\pvpthings\Listeners\InventoryClickListener.class

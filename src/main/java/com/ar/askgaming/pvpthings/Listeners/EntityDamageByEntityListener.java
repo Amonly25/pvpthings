@@ -1,6 +1,5 @@
 package com.ar.askgaming.pvpthings.Listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Zombie;
@@ -13,8 +12,6 @@ import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
 import com.ar.askgaming.pvpthings.Managers.PvpManager;
 
-import net.citizensnpcs.api.CitizensAPI;
-
 public class EntityDamageByEntityListener implements Listener{
 
     private PvpThings plugin;
@@ -24,15 +21,6 @@ public class EntityDamageByEntityListener implements Listener{
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
-
-        if (plugin.isCitizensEnabled()){
-            if (CitizensAPI.getNPCRegistry().isNPC(e.getEntity())) {
-                return;
-            }
-            if (CitizensAPI.getNPCRegistry().isNPC(e.getDamager())) {
-                return;
-            }
-        }
 
         if (e.getDamager() instanceof Player){
             Player p = (Player) e.getDamager();
@@ -84,16 +72,6 @@ public class EntityDamageByEntityListener implements Listener{
 
         manager.setLastCombat(damager, 15);
         manager.setLastCombat(damaged, 15);
-        // Tu lógica de combate aquí
-        // if (!pDamager.isInCombat()) {
-        //     manager.setLastCombat(damager, now);
-        // }
-
-        // if (!pDamaged.isInCombat()) {
-        //     pDamaged.setInCombat(true);
-        //     damaged.sendMessage("You are now in combat!");
-        //     timer(pDamaged);
-        // }
         
     } 
 }

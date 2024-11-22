@@ -24,9 +24,7 @@ public class PvpPlayer implements ConfigurationSerializable{
         this.killstreak = 0;
         this.highestKillstreak = 0;
         this.inCombat = false;
-        this.npcKilled = false;
         this.kdr = 0;
-        this.headPrice = 0.0;
         this.lastDeathLocation = null;
 
         file = new File(plugin.getDataFolder() + "/playerdata", player.getUniqueId() + ".yml");
@@ -61,9 +59,7 @@ public class PvpPlayer implements ConfigurationSerializable{
         this.deaths = (int) map.get("deaths");
         this.killstreak = (int) map.get("killstreak");
         this.highestKillstreak = (int) map.get("highestKillstreak");
-        this.npcKilled = (boolean) map.get("npcKilled");
         this.kdr = (int) map.get("kdr");
-        this.headPrice = (double) map.get("headPrice");
 
         if (map.containsKey("lastDeathLocation")) {
             this.lastDeathLocation = (Location) map.get("lastDeathLocation");
@@ -77,25 +73,33 @@ public class PvpPlayer implements ConfigurationSerializable{
         map.put("deaths", deaths);
         map.put("killstreak", killstreak);
         map.put("highestKillstreak", highestKillstreak);
-        map.put("npcKilled", npcKilled);
         map.put("kdr", kdr);
-        map.put("headPrice", headPrice);
         map.put("lastDeathLocation", lastDeathLocation);
 
         return map;
     }
 
     private Player player;
-    private boolean npcKilled;
     private int kills;
     private int deaths;
     private int killstreak;
     private int highestKillstreak;
     private boolean inCombat = false;
     private int kdr;
-    private double headPrice;
     private Location lastDeathLocation;
 
+    public int getKills() {
+        return kills;
+    }
+    public int getDeaths() {
+        return deaths;
+    }
+    public int getKillstreak() {
+        return killstreak;
+    }
+    public int getHighestKillstreak() {
+        return highestKillstreak;
+    }
     public Location getLastDeathLocation() {
         return lastDeathLocation;
     }
@@ -109,15 +113,11 @@ public class PvpPlayer implements ConfigurationSerializable{
     public void setKdr(int kdr) {
         this.kdr = kdr;
     }
-    public double getHeadPrice() {
-        return headPrice;
-    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
-    public void setHeadPrice(double headPrice) {
-        this.headPrice = headPrice;
-    }
+
     public boolean isInCombat() {
         return inCombat;
     }
@@ -127,12 +127,6 @@ public class PvpPlayer implements ConfigurationSerializable{
     }
     public Player getPlayer() {
         return player;
-    }
-    public boolean isNpcKilled() {
-        return npcKilled;
-    }
-    public void setNpcKilled(boolean npcKilled) {
-        this.npcKilled = npcKilled;
     }
 
     public void setFile(File file) {

@@ -22,12 +22,5 @@ public class PlayerJoinListener implements Listener{
 
         PvpManager manager = plugin.getPvpManager();
 
-        if (manager.getNpcPlayerLink().get(p) != null){
-            manager.switchFromNpc(p);
-        } 
-        if (pvp.isNpcKilled()){
-            p.setHealth(0);
-            pvp.setNpcKilled(false);
-        }
     }
 }

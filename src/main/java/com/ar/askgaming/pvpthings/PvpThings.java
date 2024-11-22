@@ -1,5 +1,7 @@
 package com.ar.askgaming.pvpthings;
 
+import java.lang.reflect.Method;
+
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,6 +19,7 @@ import com.ar.askgaming.pvpthings.Managers.LangManager;
 import com.ar.askgaming.pvpthings.Managers.PvpManager;
 import com.ar.askgaming.pvpthings.Utilities.Dps;
 import com.ar.askgaming.pvpthings.Utilities.Logs;
+import com.ar.askgaming.pvpthings.Utilities.Methods;
 import com.ar.askgaming.pvpthings.Utilities.PvpInfo;
 import com.ar.askgaming.pvpthings.Utilities.Recipes;
 
@@ -29,8 +32,7 @@ public class PvpThings extends JavaPlugin {
     private Logs logs;
     private ContractManager contractManager;
     private LangManager lang;
-
-    private boolean citizensEnabled;
+    private Methods methods;
 
     public void onEnable() {
         
@@ -46,6 +48,7 @@ public class PvpThings extends JavaPlugin {
         recipes = new Recipes(this);
         pvpInfo = new PvpInfo(this);
         logs = new Logs(this);
+        methods = new Methods(this);
         getServer().getPluginManager().registerEvents(logs, this);
         recipes.add();
 
@@ -57,11 +60,6 @@ public class PvpThings extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
-
-        if (getServer().getPluginManager().getPlugin("Citizens") != null) {
-            citizensEnabled = true;
-
-        }
 
         for (Player p : getServer().getOnlinePlayers()) {
             pvpManager.loadOrCreatePvpPlayer(p);
@@ -75,9 +73,7 @@ public class PvpThings extends JavaPlugin {
 
         }
     }
-    public boolean isCitizensEnabled() {
-        return citizensEnabled;
-    }
+
     public PvpManager getPvpManager() {
         return pvpManager;
     }
@@ -92,5 +88,8 @@ public class PvpThings extends JavaPlugin {
     }
     public LangManager getLang() {
         return lang;
+    }
+    public Methods getMethods() {
+        return methods;
     }
 }

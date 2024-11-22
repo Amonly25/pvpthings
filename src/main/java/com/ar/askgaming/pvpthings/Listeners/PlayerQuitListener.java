@@ -22,15 +22,12 @@ public class PlayerQuitListener implements Listener {
         PvpPlayer p = plugin.getPvpManager().getPvpPlayer(player);
         if (p.isInCombat()) {
             p.setInCombat(false);
-            if (plugin.isCitizensEnabled() && plugin.getPvpManager().createNpcPlayerLink(player)){
-                // Create a inventory backup
-                player.getEquipment().clear();
-                player.getInventory().clear();
-                Bukkit.broadcastMessage("El jugador " + player.getName() + " ha abandonado el juego, pero su NPC sigue en combate");
-            } else{
+            if (plugin.getServer().getPluginManager().getPlugin("PvpThingsNpcAddon") == null) {
                 player.setHealth(0);
-                Bukkit.broadcastMessage("El jugador " + player.getName() + " ha abandonado el juego, y ha muerto en combate");
-            }
+                Bukkit.getOnlinePlayers().forEach(pl ->{
+                    pl.sendMessage(plugin.getLang().get("death_logout",pl));
+                });
+            } 
         }
     }
 }
