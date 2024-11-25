@@ -4,12 +4,14 @@ import java.lang.reflect.Method;
 
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ar.askgaming.pvpthings.Commands.ContractsCommand;
 import com.ar.askgaming.pvpthings.Commands.PvpCommand;
 import com.ar.askgaming.pvpthings.Contracts.Contract;
 import com.ar.askgaming.pvpthings.Listeners.EntityDamageByEntityListener;
+import com.ar.askgaming.pvpthings.Listeners.EntityDamageListener;
 import com.ar.askgaming.pvpthings.Listeners.InventoryClickListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerDeathListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerJoinListener;
@@ -60,6 +62,7 @@ public class PvpThings extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new EntityDamageListener(this), this);
 
         for (Player p : getServer().getOnlinePlayers()) {
             pvpManager.loadOrCreatePvpPlayer(p);

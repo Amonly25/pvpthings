@@ -69,7 +69,8 @@ public class EntityDamageByEntityListener implements Listener{
                 return;
             }
         }
-
+        pDamaged.setInCombat(true);
+        pDamager.setInCombat(true);
         manager.setLastCombat(damager, 15);
         manager.setLastCombat(damaged, 15);
         
