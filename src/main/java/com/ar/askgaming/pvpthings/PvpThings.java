@@ -1,10 +1,8 @@
 package com.ar.askgaming.pvpthings;
 
-import java.lang.reflect.Method;
-
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ar.askgaming.pvpthings.Commands.ContractsCommand;
@@ -68,13 +66,14 @@ public class PvpThings extends JavaPlugin {
             pvpManager.loadOrCreatePvpPlayer(p);
 
         }
+        Location loc = getConfig().getLocation("dps_feature.location");
+        if (loc != null) {
+            dspTest.spawn(loc);
+        }
     }
 
     public void onDisable() {
-        if (getDps().getZombie() != null) {
-            getDps().getZombie().remove();
-
-        }
+        getDps().remove();
     }
 
     public PvpManager getPvpManager() {
