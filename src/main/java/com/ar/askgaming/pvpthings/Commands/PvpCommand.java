@@ -21,7 +21,7 @@ public class PvpCommand implements TabExecutor{
     }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return List.of("spawn_zombie", "info", "despawn_zombie", "back","stats","tops");
+        return List.of("spawn_dps", "despawn_dps", "back","stats","tops");
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -37,13 +37,10 @@ public class PvpCommand implements TabExecutor{
         Player p = (Player) sender;
 
         switch (args[0].toLowerCase()) {
-            case "spawn_zombie":
+            case "spawn_dps":
                 spawnZombie(p,args);
                 break;
-            case "info":
-                p.openInventory(plugin.getPvpInfo().getInventory());
-                break;
-            case "despawn_zombie":
+            case "despawn_dps":
                 plugin.getDps().remove();
                 break;
             case "back":
@@ -62,7 +59,7 @@ public class PvpCommand implements TabExecutor{
     }
     public void spawnZombie(Player p, String[] args) {
         plugin.getDps().spawn(p);
-        p.sendMessage("Zombie spawned");
+        p.sendMessage("Entity spawned");
     }
 
     public void back(Player p, String[] args) {

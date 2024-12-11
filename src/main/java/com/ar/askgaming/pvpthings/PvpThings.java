@@ -20,7 +20,6 @@ import com.ar.askgaming.pvpthings.Managers.PvpManager;
 import com.ar.askgaming.pvpthings.Utilities.Dps;
 import com.ar.askgaming.pvpthings.Utilities.Logs;
 import com.ar.askgaming.pvpthings.Utilities.Methods;
-import com.ar.askgaming.pvpthings.Utilities.PvpInfo;
 import com.ar.askgaming.pvpthings.Utilities.Recipes;
 
 public class PvpThings extends JavaPlugin {
@@ -28,7 +27,6 @@ public class PvpThings extends JavaPlugin {
     private PvpManager pvpManager;
     private Dps dspTest;
     private Recipes recipes;
-    private PvpInfo pvpInfo;
     private Logs logs;
     private ContractManager contractManager;
     private LangManager lang;
@@ -46,7 +44,6 @@ public class PvpThings extends JavaPlugin {
         contractManager = new ContractManager(this);
         dspTest = new Dps(this);
         recipes = new Recipes(this);
-        pvpInfo = new PvpInfo(this);
         logs = new Logs(this);
         methods = new Methods(this);
         getServer().getPluginManager().registerEvents(logs, this);
@@ -80,9 +77,7 @@ public class PvpThings extends JavaPlugin {
     public Dps getDps() {
         return dspTest;
     }
-    public PvpInfo getPvpInfo() {
-        return pvpInfo;
-    }
+
     public ContractManager getContractManager() {
         return contractManager;
     }
