@@ -6,4 +6,9 @@ logs:
   cause: true
   inventory: true
 
+dps_feature:
+  entity_type: "SKELETON"
+  name: "DPS"
+  location:
+
 pvp_info:

@@ -1,5 +1,9 @@
 package com.ar.askgaming.pvpthings.Listeners;
 
+import java.util.HashMap;
+
+import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Zombie;
@@ -19,6 +23,8 @@ public class EntityDamageByEntityListener implements Listener{
         this.plugin = plugin;
     }
     
+    private HashMap<Player, Entity> lastEntity = new HashMap<Player, Entity>();
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 
@@ -27,15 +33,11 @@ public class EntityDamageByEntityListener implements Listener{
 
             plugin.getDps().setSpeedAttack(p);
 
-            if (e.getEntity() instanceof Zombie) {
-                Zombie zombie = (Zombie) e.getEntity();
-                if (zombie.equals(plugin.getDps().getZombie())) {
-                    zombie.setHealth(1000);
-                    double damage = e.getDamage();
-                    plugin.getDps().get(p, damage);
-                }
-                return;
-            }          
+            double damage = e.getDamage();
+            plugin.getDps().get(p, damage);      
+            if (e.getEntity().equals(plugin.getDps().getDpsEntity())){
+                ((Damageable) e.getEntity()).setHealth(1000);
+            }    
         }
         
         if (!(e.getEntity() instanceof Player)){
@@ -69,7 +71,8 @@ public class EntityDamageByEntityListener implements Listener{
                 return;
             }
         }
-
+        pDamaged.setInCombat(true);
+        pDamager.setInCombat(true);
         manager.setLastCombat(damager, 15);
         manager.setLastCombat(damaged, 15);
         

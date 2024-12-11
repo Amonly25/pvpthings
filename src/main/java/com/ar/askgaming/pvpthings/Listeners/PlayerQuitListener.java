@@ -21,9 +21,9 @@ public class PlayerQuitListener implements Listener {
         Player player = e.getPlayer();
         PvpPlayer p = plugin.getPvpManager().getPvpPlayer(player);
         if (p.isInCombat()) {
-            p.setInCombat(false);
             if (plugin.getServer().getPluginManager().getPlugin("PvpThingsNpcAddon") == null) {
                 player.setHealth(0);
+                p.setInCombat(false);
                 Bukkit.getOnlinePlayers().forEach(pl ->{
                     pl.sendMessage(plugin.getLang().get("death_logout",pl));
                 });

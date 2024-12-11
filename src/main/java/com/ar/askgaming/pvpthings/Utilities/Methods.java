@@ -15,9 +15,9 @@ public class Methods {
 
     public void listTops(List<String> list, String[] args, Player p, String type) {
         int page = 1;
-        if (args.length > 1) {
+        if (args.length > 2) {
             try {
-                page = Integer.parseInt(args[1]);
+                page = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
                 p.sendMessage(plugin.getLang().get("commands.invalid_page", p));
                 return;

@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.ItemStack;
@@ -29,37 +32,44 @@ public class Dps {
     public Map<Player, Long> getLastUpdateTime() {
         return lastUpdateTime;
     }
-    private Zombie z;
+    private Entity dpsEntity;
+
+    public Entity getDpsEntity() {
+        return dpsEntity;
+    }
 
     private String name;
 
-    public void spawn(Player p){
+    public void spawn(Location loc){
         remove();
-
-        z = (Zombie) p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE);
-        z.setCustomName(name);
-        z.setCustomNameVisible(true);
-        z.setAI(false);
-        z.getAttribute(Attribute.MAX_HEALTH).setBaseValue(1000);
-        z.setHealth(1000);
-
-        ItemStack i = new ItemStack(Material.LEATHER_HELMET);
-        ItemMeta im = i.getItemMeta();
-
-        im.setUnbreakable(true);
-        i.setItemMeta(im);
-
-        z.getEquipment().setHelmet(i);
+        String entity = plugin.getConfig().getString("dps_feature.entity_type","Skeleton");
+        String name = plugin.getConfig().getString("dps_feature.name","DPS");
+        
+        try {
+            dpsEntity = loc.getWorld().spawnEntity(loc, EntityType.valueOf(entity.toUpperCase()));
+        } catch (Exception e) {
+            plugin.getLogger().warning("Invalid entity type: " + entity);
+            return;
+        }
+        LivingEntity le = (LivingEntity) dpsEntity;
+        le.setCustomNameVisible(true);
+        le.setCustomName(name.replace("&", "§"));
+        le.setAI(false);
+        le.setSilent(true);
+        le.setCollidable(false);
+        le.setCanPickupItems(false);
+        le.setRemoveWhenFarAway(false);
+        le.getAttribute(Attribute.MAX_HEALTH).setBaseValue(1000);
+        le.setHealth(1000);
+   
 
     }
     public void remove(){
-        if (z != null) {
-            z.remove();
+        if (dpsEntity != null) {
+            dpsEntity.remove();
         }
     }
-    public Zombie getZombie() {
-        return z;
-    }
+
 
     //private List<Material> swords = List.of(Material.NETHERITE_SWORD, Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.STONE_SWORD, Material.WOODEN_SWORD);
     private List<Material> axes = List.of(Material.DIAMOND_AXE, Material.IRON_AXE, Material.GOLDEN_AXE, Material.STONE_AXE, Material.WOODEN_AXE, Material.NETHERITE_AXE,Material.TRIDENT);
