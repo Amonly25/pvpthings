@@ -31,10 +31,9 @@ public class EntityDamageByEntityListener implements Listener{
         if (e.getDamager() instanceof Player){
             Player p = (Player) e.getDamager();
 
-            plugin.getDps().setSpeedAttack(p);
-
             double damage = e.getDamage();
-            plugin.getDps().get(p, damage);      
+            plugin.getDps().get(p, damage);   
+            plugin.getDps().setSpeedAttack(p);   
             if (e.getEntity().equals(plugin.getDps().getDpsEntity())){
                 ((Damageable) e.getEntity()).setHealth(1000);
             }    

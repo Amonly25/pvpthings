@@ -1,10 +1,6 @@
 com\ar\askgaming\pvpthings\Commands\ContractsCommand.class
 com\ar\askgaming\pvpthings\Utilities\Methods.class
-<<<<<<< HEAD
-=======
-com\ar\askgaming\pvpthings\Utilities\PvpInfo.class
 com\ar\askgaming\pvpthings\Listeners\EntityDamageListener.class
->>>>>>> 0816f9adbae16706af338aefe0d3e3af634a7cc8
 com\ar\askgaming\pvpthings\PvpThings.class
 com\ar\askgaming\pvpthings\Listeners\InventoryClickListener.class
 com\ar\askgaming\pvpthings\Utilities\Dps.class

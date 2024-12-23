@@ -3,7 +3,12 @@ package com.ar.askgaming.pvpthings.Utilities;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -72,24 +77,20 @@ public class Dps {
 
 
     //private List<Material> swords = List.of(Material.NETHERITE_SWORD, Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.STONE_SWORD, Material.WOODEN_SWORD);
-    private List<Material> axes = List.of(Material.DIAMOND_AXE, Material.IRON_AXE, Material.GOLDEN_AXE, Material.STONE_AXE, Material.WOODEN_AXE, Material.NETHERITE_AXE,Material.TRIDENT);
+    private List<Material> axes = List.of(Material.DIAMOND_AXE, Material.IRON_AXE, Material.GOLDEN_AXE, Material.STONE_AXE, 
+    Material.WOODEN_AXE, Material.NETHERITE_AXE,Material.TRIDENT, Material.MACE);
 
     public void setSpeedAttack(Player player){
         ItemStack i = player.getInventory().getItemInMainHand();
         if (i == null || i.getType() == Material.AIR) return;
 
-        if (i.getType().equals(Material.MACE)){
-            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(4);
-            //player.sendMessage("Speed attack set to 4");
-            return;
-        }
-
         if (axes.contains(i.getType())){
-            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(8);
+            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(15);
+            
             //player.sendMessage("Speed attack set to 8");
             return;
         } else {
-            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(7); 
+            player.getAttribute(Attribute.ATTACK_SPEED).setBaseValue(24); 
            // player.sendMessage("Speed attack set to 7");
         }
     }
@@ -111,14 +112,15 @@ public class Dps {
         // Si el tiempo entre ataques es menor que un segundo, calculamos el DPS
         if (timeInterval > 0) {
             double dps = damage / timeInterval; // Calcular el DPS (Daño por segundo)
-
+            int cps = (int) (1 / timeInterval); // Calcular el CPS (Clics por segundo)
             // Enviar el valor del DPS al jugador
 
-            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacy("DPS: " + String.format("%.2f", dps)));
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacy("DPS: " + String.format("%.2f", dps)+ " Cps: " + cps));
 
             // Actualizar el tiempo del último ataque y el daño infligido
             lastUpdateTime.put(p, currentTime);
 
-        }
+        } 
     }
+
 }
