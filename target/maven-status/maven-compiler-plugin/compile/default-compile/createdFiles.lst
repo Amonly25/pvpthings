@@ -1,4 +1,5 @@
 com\ar\askgaming\pvpthings\Commands\ContractsCommand.class
+com\ar\askgaming\pvpthings\Listeners\PlayerTeleportListener.class
 com\ar\askgaming\pvpthings\Utilities\Methods.class
 com\ar\askgaming\pvpthings\Listeners\EntityDamageListener.class
 com\ar\askgaming\pvpthings\PvpThings.class

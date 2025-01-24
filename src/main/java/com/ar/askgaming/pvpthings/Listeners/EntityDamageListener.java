@@ -27,13 +27,16 @@ public class EntityDamageListener implements Listener{
 
         if (pDamaged.isInCombat()) {
             if (e.isCancelled()) {
+                if (e.getDamageSource().getCausingEntity() instanceof Player){
+                    return;
+                }
                 e.setCancelled(false);
             }
-            
-        } else {
-            if (e.isCancelled()) {
-                return;
-            }
-        }        
+        }
+        // } else {
+        //     if (e.isCancelled()) {
+        //         return;
+        //     }
+        // }        
     } 
 }

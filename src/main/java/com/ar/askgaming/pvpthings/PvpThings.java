@@ -14,6 +14,7 @@ import com.ar.askgaming.pvpthings.Listeners.InventoryClickListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerDeathListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerJoinListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerQuitListener;
+import com.ar.askgaming.pvpthings.Listeners.PlayerTeleportListener;
 import com.ar.askgaming.pvpthings.Managers.ContractManager;
 import com.ar.askgaming.pvpthings.Managers.LangManager;
 import com.ar.askgaming.pvpthings.Managers.PvpManager;
@@ -58,6 +59,7 @@ public class PvpThings extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
         getServer().getPluginManager().registerEvents(new EntityDamageListener(this), this);
+        new PlayerTeleportListener(this);
 
         for (Player p : getServer().getOnlinePlayers()) {
             pvpManager.loadOrCreatePvpPlayer(p);

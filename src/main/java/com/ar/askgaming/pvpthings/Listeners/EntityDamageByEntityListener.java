@@ -54,22 +54,35 @@ public class EntityDamageByEntityListener implements Listener{
                 damager = (Player) projectile.getShooter();
             } else {return;}
         } else {return;}
+        
+        if (damaged.equals(damager)){
+            return;
 
+        }
         PvpManager manager = plugin.getPvpManager();
 
         PvpPlayer pDamager = manager.getPvpPlayer(damager);
         PvpPlayer pDamaged = manager.getPvpPlayer(damaged);
 
-        if (pDamaged.isInCombat()) {
-            if (e.isCancelled()) {
+
+        if (e.isCancelled()){
+            if (pDamaged.isInCombat() && pDamager.isInCombat()){
                 e.setCancelled(false);
-            }
-            
-        } else {
-            if (e.isCancelled()) {
+            } else {
                 return;
             }
         }
+
+        // if (pDamaged.isInCombat() && pDamager.isInCombat()){ 
+        //     if (e.isCancelled()) {
+        //         e.setCancelled(false);
+        //     }
+            
+        // } else {
+        //     if (e.isCancelled()) {
+        //         return;
+        //     }
+        // }
         pDamaged.setInCombat(true);
         pDamager.setInCombat(true);
         manager.setLastCombat(damager, 15);
