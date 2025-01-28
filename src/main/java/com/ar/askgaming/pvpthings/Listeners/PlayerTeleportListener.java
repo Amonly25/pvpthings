@@ -25,7 +25,7 @@ public class PlayerTeleportListener implements Listener{
                 Location loc = event.getTo();
 
                 if (loc.getBlock().getType().isSolid() || loc.getBlock().getRelative(0, 1, 0).getType().isSolid()) {
-                    player.sendMessage("You can't teleport there!");
+                    player.sendMessage(plugin.getLang().get("antipearl", player));
                     event.setCancelled(true);
 
                 }

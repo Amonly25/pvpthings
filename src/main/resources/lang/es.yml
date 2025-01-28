@@ -2,6 +2,7 @@ in_combat: "&7En combate por &c{time}s"
 leave_combat: "&aHas salido del combate."
 enter_combat: "&7Ahora estás en combate."
 death_logout: "&c{player} murió por desconectarse en combate."
+antipearl: "&cTeletransporte cancelado, proteccion de bug de perla."
 commands:
   invalid_page: "&cNúmero de página inválido."
 
