@@ -6,7 +6,6 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,7 +30,7 @@ public class EntityDamageByEntityListener implements Listener{
         if (e.getDamager() instanceof Player){
             Player p = (Player) e.getDamager();
 
-            double damage = e.getDamage();
+            double damage = e.getFinalDamage();
             plugin.getDps().get(p, damage);   
             plugin.getDps().setSpeedAttack(p);   
             if (e.getEntity().equals(plugin.getDps().getDpsEntity())){
