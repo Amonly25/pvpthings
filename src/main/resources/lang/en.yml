@@ -5,6 +5,6 @@ death_logout: "&c{player} died from disconnecting in combat."
 antipearl: "&cTeleport cancelled, anti pearl exploit."
 commands:
   invalid_page: "&cInvalid page number."
-
+  blacklist: "&cYou can't use this command while in combat!"
 misc:
   tops: "&7Top stats: &a{top}, pages: "

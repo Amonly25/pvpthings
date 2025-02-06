@@ -1,4 +1,4 @@
-package com.ar.askgaming.pvpthings.Listeners;
+package com.ar.askgaming.pvpthings.Listeners.PlayerListeners;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

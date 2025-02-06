@@ -11,4 +11,5 @@ dps_feature:
   name: "DPS"
   location:
 
-pvp_info:
+command_blacklist:
+  - "duel"
