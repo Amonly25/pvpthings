@@ -1,6 +1,7 @@
 package com.ar.askgaming.pvpthings.Listeners;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
@@ -54,6 +55,15 @@ public class EntityDamageByEntityListener implements Listener{
             } else {return;}
         } else {return;}
         
+
+        List<String> disabledWorlds = plugin.getConfig().getStringList("disabled_worlds");
+        for (String world : disabledWorlds) {
+            if (damaged.getWorld().getName().equalsIgnoreCase(world)) {
+                return;
+            }
+        }
+
+
         if (damaged.equals(damager)){
             return;
 

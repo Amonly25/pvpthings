@@ -1,3 +1,7 @@
+disabled_worlds:
+  - "duels"
+  - "another_world"
+
 utilities:
   enchanted_golden_apple_recipe: true
 
@@ -13,3 +17,16 @@ dps_feature:
 
 command_blacklist:
   - "duel"
+
+anti_pearl:
+  enable: true
+  blacklist_materials:
+  - CARPET
+  - BED
+  - SLAB
+  - STAIRS
+  - HOPPER
+
+
+
+
