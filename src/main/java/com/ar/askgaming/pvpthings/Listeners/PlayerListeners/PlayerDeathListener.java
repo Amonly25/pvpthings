@@ -20,6 +20,7 @@ public class PlayerDeathListener implements Listener{
         Player pl = e.getEntity();
         PvpPlayer pvpl = plugin.getPvpManager().getPvpPlayer(pl);
         if (pvpl == null) return;
+        pvpl.setInCombat(false);
         pvpl.setLastDeathLocation(pl.getLocation());
     }
 }
