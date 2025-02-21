@@ -105,10 +105,10 @@ public class Dps {
         // Si el tiempo entre ataques es menor que un segundo, calculamos el DPS
         if (timeInterval > 0) {
             double dps = damage / timeInterval; // Calcular el DPS (Daño por segundo)
-            int cps = (int) (1 / timeInterval); // Calcular el CPS (Clics por segundo)
+            //int cps = (int) (1 / timeInterval); // Calcular el CPS (Clics por segundo)
             // Enviar el valor del DPS al jugador
 
-            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacy("DPS: " + String.format("%.2f", dps)+ " Cps: " + cps));
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacy("DPS: " + String.format("%.2f", dps)));
 
             // Actualizar el tiempo del último ataque y el daño infligido
             lastUpdateTime.put(p, currentTime);
