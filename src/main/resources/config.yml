@@ -18,15 +18,6 @@ dps_feature:
 command_blacklist:
   - "duel"
 
-anti_pearl:
-  enable: true
-  blacklist_materials:
-  - CARPET
-  - BED
-  - SLAB
-  - STAIRS
-  - HOPPER
-
 
 
 
