@@ -28,8 +28,9 @@ public class PlayerCommandListener implements Listener{
 
         List<String> blackList = plugin.getConfig().getStringList("command_blacklist");
 
-        PvpPlayer pvp = plugin.getPvpManager().getPvpPlayer(p);
-        if (pvp == null || !pvp.isInCombat()) return;
+        PvpPlayer pvpPlayer = plugin.getDataManager().getPvpPlayer(p.getUniqueId());
+        if (pvpPlayer == null) return;
+        if (!pvpPlayer.isInCombat()) return;
     
         String message = event.getMessage().toLowerCase(); // Convertir a minúsculas para evitar problemas con mayúsculas
     

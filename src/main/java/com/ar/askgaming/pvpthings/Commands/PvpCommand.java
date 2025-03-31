@@ -1,8 +1,5 @@
 package com.ar.askgaming.pvpthings.Commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.command.Command;
@@ -10,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
 
 public class PvpCommand implements TabExecutor{
@@ -43,14 +39,11 @@ public class PvpCommand implements TabExecutor{
             case "despawn_dps_entity":
                 plugin.getDps().remove();
                 break;
-            case "back":
-                back(p,args);
+
             case "stats":
-                stats(p,args);
                 break;
             case "tops":
             case "top":
-                tops(p,args);
                 break;
             default:
                 break;
@@ -64,38 +57,32 @@ public class PvpCommand implements TabExecutor{
         p.sendMessage("§aEntity spawned.");
     }
 
-    public void back(Player p, String[] args) {
-        PvpPlayer pvp = plugin.getPvpManager().loadOrCreatePvpPlayer(p);
-        if (pvp.getLastDeathLocation() != null) {
-            p.teleport(pvp.getLastDeathLocation());
-        }
-    }
-    public void stats(Player p, String[] args) {
-        PvpPlayer pvp = plugin.getPvpManager().loadOrCreatePvpPlayer(p);
-        p.sendMessage("Kills: " + pvp.getKills());
-        p.sendMessage("Deaths: " + pvp.getDeaths());
-        p.sendMessage("K/D: " + pvp.getKdr());
-        p.sendMessage("Killstreak: " + pvp.getKillstreak());
-        p.sendMessage("Highest Killstreak: " + pvp.getHighestKillstreak());
+    // public void stats(Player p, String[] args) {
+    //     PvpPlayer pvp = plugin.getPvpManager().loadOrCreatePvpPlayer(p);
+    //     p.sendMessage("Kills: " + pvp.getKills());
+    //     p.sendMessage("Deaths: " + pvp.getDeaths());
+    //     p.sendMessage("K/D: " + pvp.getKdr());
+    //     p.sendMessage("Killstreak: " + pvp.getKillstreak());
+    //     p.sendMessage("Highest Killstreak: " + pvp.getHighestKillstreak());
 
-    }
-    public void tops(Player p, String[] args) {
-        if (args.length < 2) {
-            p.sendMessage("Usage: /pvp tops <kills/deaths/killstreak/kdr>");
-            return;
-        }
+    // }
+    // public void tops(Player p, String[] args) {
+    //     if (args.length < 2) {
+    //         p.sendMessage("Usage: /pvp tops <kills/deaths/killstreak/kdr>");
+    //         return;
+    //     }
 
-        String type = args[1].toLowerCase();
-        List<String> validTypes = Arrays.asList("kills", "deaths", "killstreak", "kdr");
+    //     String type = args[1].toLowerCase();
+    //     List<String> validTypes = Arrays.asList("kills", "deaths", "killstreak", "kdr");
 
-        if (!validTypes.contains(type)) {
-            p.sendMessage("Usage: /pvp tops <kills/deaths/killstreak/kdr>");
-            return;
-        }
+    //     if (!validTypes.contains(type)) {
+    //         p.sendMessage("Usage: /pvp tops <kills/deaths/killstreak/kdr>");
+    //         return;
+    //     }
 
-        HashMap<String, Integer> map = plugin.getPvpManager().getTop(type);
-        List<String> list = new ArrayList<>();
-        map.entrySet().forEach(e -> list.add(e.getKey() + " - " + e.getValue() + " " + type));
-        plugin.getMethods().listTops(list, args, p, type);
-    }
+    //     HashMap<String, Integer> map = plugin.getPvpManager().getTop(type);
+    //     List<String> list = new ArrayList<>();
+    //     map.entrySet().forEach(e -> list.add(e.getKey() + " - " + e.getValue() + " " + type));
+    //     plugin.getMethods().listTops(list, args, p, type);
+    // }
 }

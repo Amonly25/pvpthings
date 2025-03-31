@@ -13,9 +13,11 @@ import com.ar.askgaming.pvpthings.PvpThings;
 
 public class EntityDamageListener implements Listener{
 
-    private PvpThings plugin;
+    private final PvpThings plugin;
     public EntityDamageListener(PvpThings plugin) {
         this.plugin = plugin;
+
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageEvent e) {
@@ -32,8 +34,11 @@ public class EntityDamageListener implements Listener{
                 return;
             }
         }
-
-        PvpPlayer pDamaged = plugin.getPvpManager().getPvpPlayer(damaged);
+        
+        PvpPlayer pDamaged = plugin.getDataManager().getPvpPlayer(damaged.getUniqueId());
+        if (pDamaged == null) {
+            return;
+        }
 
         if (pDamaged.isInCombat()) {
             if (e.isCancelled()) {
@@ -42,11 +47,6 @@ public class EntityDamageListener implements Listener{
                 }
                 e.setCancelled(false);
             }
-        }
-        // } else {
-        //     if (e.isCancelled()) {
-        //         return;
-        //     }
-        // }        
+        }     
     } 
 }

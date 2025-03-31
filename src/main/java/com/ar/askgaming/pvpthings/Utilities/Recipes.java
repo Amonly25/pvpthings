@@ -11,9 +11,11 @@ import com.ar.askgaming.pvpthings.PvpThings;
 
 public class Recipes {
 
-    private PvpThings plugin;
+    private final PvpThings plugin;
     public Recipes(PvpThings plugin) {
         this.plugin = plugin;
+
+        add();
     }
 
     public void add(){

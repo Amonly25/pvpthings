@@ -1,3 +1,11 @@
+#database: sqlite, mysql
+data_mode: "sqlite"
+mysql:
+  url: "host:port/database_name"
+  username: "yourUsername"
+  password: "yourPassword"
+
+# Will disable combat log for the specified worlds
 disabled_worlds:
   - "duels"
   - "another_world"
@@ -5,18 +13,17 @@ disabled_worlds:
 utilities:
   enchanted_golden_apple_recipe: true
 
-logs:
-  enable: true
-  cause: true
-  inventory: true
-
 dps_feature:
   entity_type: "SKELETON"
   name: "DPS"
   location:
 
+#This commands will be disabled when the player is in combat
 command_blacklist:
   - "duel"
+  - "fly"
+  - "heal"
+  - "god"
 
 
 

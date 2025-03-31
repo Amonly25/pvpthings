@@ -20,28 +20,37 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class Dps {
 
-    private PvpThings plugin;
+    private final PvpThings plugin;
     public Dps(PvpThings plugin) {
         this.plugin = plugin;
+
+        load();
+    }
+    public void load(){
+        name = plugin.getConfig().getString("dps_feature.name","DPS");
+        loc = plugin.getConfig().getLocation("dps_feature.location");
+        if (loc == null) {
+            return;
+        }
+        spawn(loc);
+
     }
 
     private final Map<Player, Long> lastUpdateTime = new HashMap<>();
-
-    public Map<Player, Long> getLastUpdateTime() {
-        return lastUpdateTime;
-    }
     private Entity dpsEntity;
+    private String name;
+    private Location loc;
 
     public Entity getDpsEntity() {
         return dpsEntity;
     }
-
-    private String name;
+    public Map<Player, Long> getLastUpdateTime() {
+        return lastUpdateTime;
+    }
 
     public void spawn(Location loc){
         remove();
         String entity = plugin.getConfig().getString("dps_feature.entity_type","Skeleton");
-        String name = plugin.getConfig().getString("dps_feature.name","DPS");
         
         try {
             dpsEntity = loc.getWorld().spawnEntity(loc, EntityType.valueOf(entity.toUpperCase()));
@@ -49,21 +58,20 @@ public class Dps {
             plugin.getLogger().warning("Invalid entity type: " + entity);
             return;
         }
+
         LivingEntity le = (LivingEntity) dpsEntity;
         le.setCustomNameVisible(true);
         le.setCustomName(name.replace("&", "§"));
         le.setAI(false);
         le.setSilent(true);
-        le.setCollidable(false);
         le.setCanPickupItems(false);
         le.setRemoveWhenFarAway(false);
-        le.getAttribute(Attribute.MAX_HEALTH).setBaseValue(1000);
-        le.setHealth(1000);
+        le.getAttribute(Attribute.MAX_HEALTH).setBaseValue(1024);
+        le.setHealth(1024);
    
-
     }
     public void remove(){
-        if (dpsEntity != null) {
+        if (dpsEntity != null && dpsEntity.isValid()) {
             dpsEntity.remove();
         }
     }
@@ -115,5 +123,4 @@ public class Dps {
 
         } 
     }
-
 }

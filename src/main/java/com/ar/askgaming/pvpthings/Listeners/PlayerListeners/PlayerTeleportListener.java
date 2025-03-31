@@ -15,7 +15,7 @@ import com.ar.askgaming.pvpthings.PvpThings;
 
 public class PlayerTeleportListener implements Listener{
 
-    private PvpThings plugin;
+    private final PvpThings plugin;
     public PlayerTeleportListener(PvpThings plugin) {
         this.plugin = plugin;
 

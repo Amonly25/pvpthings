@@ -1,4 +1,4 @@
-package com.ar.askgaming.pvpthings.Managers;
+package com.ar.askgaming.pvpthings.Contracts;
 
 import java.io.File;
 import java.util.HashMap;
@@ -10,24 +10,23 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.ar.askgaming.pvpthings.PvpThings;
-import com.ar.askgaming.pvpthings.Contracts.Contract;
 
 public class ContractManager {
 
-    private PvpThings plugin;
-    private HashMap<UUID, Contract> contracts = new HashMap<>();
-    private File file;
+    private final PvpThings plugin;
+    private final HashMap<UUID, Contract> contracts = new HashMap<>();
+    private final File file;
     private FileConfiguration config;
-
-    public HashMap<UUID, Contract> getContracts() {
-        return contracts;
-    }
 
     public ContractManager(PvpThings plugin) {
         this.plugin = plugin;
 
         file = new File(plugin.getDataFolder(), "contracts.yml");
 
+        load();
+    }
+    public void load(){
+        contracts.clear();
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -35,25 +34,21 @@ public class ContractManager {
                 e.printStackTrace();
             }
         }
-        config = new YamlConfiguration();
-        try{
-            config.load(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // Obtener todas las claves del nivel raíz
+        config = YamlConfiguration.loadConfiguration(file);
         Set<String> keys = config.getKeys(false);
-
-        // Iterar sobre todas las keys y cargar cada Protection
+        if (keys.isEmpty()) {
+            return;
+        }
         for (String key : keys) {
             Object obj = config.get(key);
             if (obj instanceof Contract) {
                 Contract contract = (Contract) obj;
                 contracts.put(UUID.fromString(key), contract);
-    
             }
         }
+    }
+    public HashMap<UUID, Contract> getContracts() {
+        return contracts;
     }
     public void save(Contract contract){
         config.set(contract.getHunted().toString(), contract);

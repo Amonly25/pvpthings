@@ -1,4 +1,4 @@
-package com.ar.askgaming.pvpthings.Commands;
+package com.ar.askgaming.pvpthings.Contracts;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +13,6 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import com.ar.askgaming.pvpthings.PvpThings;
-import com.ar.askgaming.pvpthings.Contracts.Contract;
 
 public class ContractsCommand implements TabExecutor {
 

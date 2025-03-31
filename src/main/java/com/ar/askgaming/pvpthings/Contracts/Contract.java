@@ -7,23 +7,26 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public class Contract implements ConfigurationSerializable {
 
-    private double price;
-    private UUID hunted;
-    private UUID hunter;
-    private long time;
+    private Double price;
+    private UUID hunted, hunter;
+    private Long createdTime;
+    private String id;
+
     public Contract(double price, UUID hunted, UUID hunter) {
         this.price = price;
         this.hunted = hunted;
         this.hunter = hunter;
         
-        long time = System.currentTimeMillis();
+        createdTime= System.currentTimeMillis();
+        id = UUID.randomUUID().toString();
+
     }
 
     public Contract(Map<String, Object> map) {
         this.price = (double) map.get("price");
         this.hunted = UUID.fromString((String) map.get("hunted"));
         this.hunter = UUID.fromString((String) map.get("hunter"));
-        this.time = (long) map.get("time");
+        this.createdTime = (long) map.get("time");
     }
 
     @Override
@@ -32,7 +35,7 @@ public class Contract implements ConfigurationSerializable {
             "price", price,
             "hunted", hunted.toString(),
             "hunter", hunter.toString(),
-            "time", time
+            "time", createdTime
         );
     }
     public double getPrice() {
@@ -59,13 +62,10 @@ public class Contract implements ConfigurationSerializable {
         this.hunter = hunter;
     }
 
-    public long getTime() {
-        return time;
+    public Long getCreatedTime() {
+        return createdTime;
     }
 
-    public void setTime(long time) {
-        this.time = time;
-    }
     
 
 }

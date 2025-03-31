@@ -1,92 +1,69 @@
 package com.ar.askgaming.pvpthings;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
-import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.Statistic;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-public class PvpPlayer implements ConfigurationSerializable{
+public class PvpPlayer{
 
-    private File file;
-    private FileConfiguration config;
-    private PvpThings plugin = PvpThings.getPlugin(PvpThings.class);
+    private PvpThings plugin = PvpThings.getInstance();
 
-    public PvpPlayer(Player player) {
-        this.player = player;
-        this.kills = 0;
-        this.deaths = 0;
-        this.killstreak = 0;
-        this.highestKillstreak = 0;
+    private Integer kills, deaths, killstreak, highestKillstreak, kdr, timeSinceDeath;
+  
+    private Boolean inCombat;
+    private UUID uuid;
+    public PvpPlayer(UUID uuid, Integer kills, Integer deaths, Integer killstreak, Integer highestKillstreak, Integer timeSinceDeath) {
+        this.uuid = uuid;
+        this.kills = kills;
+        this.deaths = deaths;
+        this.killstreak = killstreak;
+        this.highestKillstreak = highestKillstreak;
         this.inCombat = false;
-        this.kdr = 0;
-        this.lastDeathLocation = null;
+        this.timeSinceDeath = timeSinceDeath;
 
-        file = new File(plugin.getDataFolder() + "/playerdata", player.getUniqueId() + ".yml");
+        this.kdr = (int) Math.round((double) kills / (deaths == 0 ? 1 : deaths));
 
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+        plugin.getServer().getScheduler().runTaskLater(plugin, 
+        new Runnable() {
+            @Override
+            public void run() {
+                checkAndUpdateData();
             }
-        }
-        config = new YamlConfiguration();
+        }, 20L);
 
-        try {
-            config.load(file);
-        } catch (IOException | org.bukkit.configuration.InvalidConfigurationException e) {
-            e.printStackTrace();
+    }
+    public void checkAndUpdateData() {
+        Player p = plugin.getServer().getPlayer(uuid);
+        if (p == null) {
+            plugin.getLogger().warning("Skipping update for player " + uuid.toString() + " because they are not online.");
+            return;
         }
-        config.set(player.getUniqueId().toString(), this);
+        kills = p.getStatistic(Statistic.KILL_ENTITY, EntityType.PLAYER);
+        deaths = p.getStatistic(Statistic.DEATHS);
+        timeSinceDeath = p.getStatistic(Statistic.TIME_SINCE_DEATH);
+
         save();
     }
+
     private void save(){
-        try {
-            config.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        plugin.getDataManager().savePlayerData(this);
     }
 
-    public PvpPlayer(Map<String, Object> map) {
-        this.kills = (int) map.get("kills");
-        this.deaths = (int) map.get("deaths");
-        this.killstreak = (int) map.get("killstreak");
-        this.highestKillstreak = (int) map.get("highestKillstreak");
-        this.kdr = (int) map.get("kdr");
-
-        if (map.containsKey("lastDeathLocation")) {
-            this.lastDeathLocation = (Location) map.get("lastDeathLocation");
-        }
-    }
-    @Override
-    public Map<String, Object> serialize() {
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("kills", kills);
-        map.put("deaths", deaths);
-        map.put("killstreak", killstreak);
-        map.put("highestKillstreak", highestKillstreak);
-        map.put("kdr", kdr);
-        map.put("lastDeathLocation", lastDeathLocation);
-
-        return map;
+    public Integer getTimeSinceDeath() {
+        return timeSinceDeath;
     }
 
-    private Player player;
-    private int kills;
-    private int deaths;
-    private int killstreak;
-    private int highestKillstreak;
-    private boolean inCombat = false;
-    private int kdr;
-    private Location lastDeathLocation;
+    public void setKillstreak(int killstreak) {
+        this.killstreak = killstreak;
+    }
+    public void setHighestKillstreak(int highestKillstreak) {
+        this.highestKillstreak = highestKillstreak;
+    }
+    public void setTimeSinceDeath(int timeSinceDeath) {
+        this.timeSinceDeath = timeSinceDeath;
+    }
 
     public int getKills() {
         return kills;
@@ -94,28 +71,21 @@ public class PvpPlayer implements ConfigurationSerializable{
     public int getDeaths() {
         return deaths;
     }
+    public UUID getUuid() {
+        return uuid;
+    }
     public int getKillstreak() {
         return killstreak;
     }
     public int getHighestKillstreak() {
         return highestKillstreak;
     }
-    public Location getLastDeathLocation() {
-        return lastDeathLocation;
-    }
-    public void setLastDeathLocation(Location lastDeathLocation) {
-        this.lastDeathLocation = lastDeathLocation;
-        save();
-    }
+
     public int getKdr() {
         return kdr;
     }
     public void setKdr(int kdr) {
         this.kdr = kdr;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
     }
 
     public boolean isInCombat() {
@@ -124,16 +94,5 @@ public class PvpPlayer implements ConfigurationSerializable{
 
     public void setInCombat(boolean inCombat) {
         this.inCombat = inCombat;
-    }
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    public void setConfig(FileConfiguration config) {
-        this.config = config;
     }
 }

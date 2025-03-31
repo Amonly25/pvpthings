@@ -1,10 +1,8 @@
 package com.ar.askgaming.pvpthings.Listeners;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -14,17 +12,17 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
-import com.ar.askgaming.pvpthings.Managers.PvpManager;
+import com.ar.askgaming.pvpthings.Commands.PvpManager;
 
 public class EntityDamageByEntityListener implements Listener{
 
-    private PvpThings plugin;
+    private final PvpThings plugin;
     public EntityDamageByEntityListener(PvpThings plugin) {
         this.plugin = plugin;
+
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
     
-    private HashMap<Player, Entity> lastEntity = new HashMap<Player, Entity>();
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 
@@ -63,17 +61,18 @@ public class EntityDamageByEntityListener implements Listener{
             }
         }
 
-
         if (damaged.equals(damager)){
             return;
 
+        }        
+
+        PvpPlayer pDamager = plugin.getDataManager().getPvpPlayer(damager.getUniqueId());
+        PvpPlayer pDamaged = plugin.getDataManager().getPvpPlayer(damaged.getUniqueId());
+        if (pDamager == null || pDamaged == null) {
+            return;
         }
+
         PvpManager manager = plugin.getPvpManager();
-
-        PvpPlayer pDamager = manager.getPvpPlayer(damager);
-        PvpPlayer pDamaged = manager.getPvpPlayer(damaged);
-
-
         if (e.isCancelled()){
             if (pDamaged.isInCombat() && pDamager.isInCombat()){
                 e.setCancelled(false);
@@ -82,16 +81,6 @@ public class EntityDamageByEntityListener implements Listener{
             }
         }
 
-        // if (pDamaged.isInCombat() && pDamager.isInCombat()){ 
-        //     if (e.isCancelled()) {
-        //         e.setCancelled(false);
-        //     }
-            
-        // } else {
-        //     if (e.isCancelled()) {
-        //         return;
-        //     }
-        // }
         pDamaged.setInCombat(true);
         pDamager.setInCombat(true);
         manager.setLastCombat(damager, 15);

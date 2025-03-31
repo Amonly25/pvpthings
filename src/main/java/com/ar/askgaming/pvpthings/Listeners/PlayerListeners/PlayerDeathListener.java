@@ -10,17 +10,19 @@ import com.ar.askgaming.pvpthings.PvpThings;
 
 public class PlayerDeathListener implements Listener{
 
-    private PvpThings plugin;
+    private final PvpThings plugin;
     public PlayerDeathListener(PvpThings plugin) {
         this.plugin = plugin;
+
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent e) {
 
-        Player pl = e.getEntity();
-        PvpPlayer pvpl = plugin.getPvpManager().getPvpPlayer(pl);
-        if (pvpl == null) return;
-        pvpl.setInCombat(false);
-        pvpl.setLastDeathLocation(pl.getLocation());
+        Player p = e.getEntity();
+        PvpPlayer pvpPlayer = plugin.getDataManager().getPvpPlayer(p.getUniqueId());
+        if (pvpPlayer == null) return;
+        pvpPlayer.setInCombat(false);
+
     }
 }
