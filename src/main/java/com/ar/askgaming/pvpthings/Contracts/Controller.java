@@ -44,11 +44,14 @@ public class Controller {
             return;
         }
         for (String key : keys) {
-            Object obj = config.get(key);
-            if (obj instanceof Contract) {
-                Contract contract = (Contract) obj;
-                contracts.put(UUID.fromString(key), contract);
-            }
+            String id = key;
+            double prize = config.getDouble(key + ".prize");
+            UUID hunted = UUID.fromString(config.getString(key + ".hunted"));
+            String creator = config.getString(key + ".creator");
+            long createdTime = config.getLong(key + ".createdTime");
+
+            Contract contract = new Contract(id, prize, hunted, creator, createdTime);
+            contracts.put(hunted, contract);
         }
     }
     public HashMap<UUID, Contract> getContracts() {
@@ -62,15 +65,22 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    public void createContract(Player hunter, Player hunted, double reward){
-        String creator;
-        if (hunter == null) {
-            creator = "Server";
-        } else {
-            creator = hunter.getName();
-        }
+    //#region create
+    public void createContract(String creator, Player hunted, double reward){
         Contract contract = new Contract(reward, hunted.getUniqueId(), creator);
         contracts.put(hunted.getUniqueId(), contract);
         save(contract);
+    }
+    public boolean hasContract(UUID uuid) {
+        return contracts.containsKey(uuid);
+    }
+    //#region addCreator
+    public void addCreator(UUID uuid, String creator, Double amount) {
+        Contract contract = contracts.get(uuid);
+        if (contract != null) {
+            contract.addCreator(creator);
+            
+            save(contract);
+        }
     }
 }

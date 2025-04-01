@@ -73,14 +73,17 @@ public class Commands implements TabExecutor {
             sender.sendMessage(getLang("commands.invalid_number", sender));
             return;
         }
+        String creator = "Server";
+        
         if (sender instanceof Player) {
             Player p = (Player) sender;
             if (target == sender) {
                 return;
             }
-            plugin.getContractController().createContract(p, target, amount);
+            creator = p.getName();
+        }
 
-        } else plugin.getContractController().createContract(null, target, amount);
+        plugin.getContractController().createContract(creator, target, amount);
 
     }
     //#region List

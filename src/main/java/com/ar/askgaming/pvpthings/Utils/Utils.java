@@ -3,8 +3,12 @@ package com.ar.askgaming.pvpthings.Utils;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.ar.askgaming.pvpthings.PvpThings;
+import com.ar.askgaming.realisticeconomy.RealisticEconomy;
+
+import net.milkbowl.vault.economy.EconomyResponse;
 
 public class Utils {
 
@@ -34,5 +38,28 @@ public class Utils {
             String string = list.get(i);
             sender.sendMessage((i + 1) + ". " + string);
         }
+    }
+    public static boolean hasMoney(Player player, Double amount){
+        
+        if (plugin.getRealisticEconomy() != null){
+            RealisticEconomy economy = plugin.getRealisticEconomy();
+            return economy.getEconomyService().getBalance(player.getUniqueId()) >= amount;
+        }
+        if (plugin.getVaultEconomy() != null){
+            return plugin.getVaultEconomy().getBalance(player) >= amount;
+        }
+        player.sendMessage("No economy plugin found, please contact the server admin.");
+        return false;
+    }
+    public static boolean removeMoney(Player player, Double amount){
+        if (plugin.getRealisticEconomy() != null){
+            RealisticEconomy economy = plugin.getRealisticEconomy();
+            return economy.getServerBank().transferWithPlayer(player.getUniqueId(), amount, false);
+        }
+        if (plugin.getVaultEconomy() != null){
+            EconomyResponse r = plugin.getVaultEconomy().withdrawPlayer(player, amount);
+            return r.transactionSuccess();
+        }
+        return false;
     }
 }
