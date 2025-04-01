@@ -11,15 +11,17 @@ import org.bukkit.entity.Player;
 
 import com.ar.askgaming.pvpthings.PvpThings;
 
-public class ContractManager {
+public class Controller {
 
     private final PvpThings plugin;
     private final HashMap<UUID, Contract> contracts = new HashMap<>();
     private final File file;
     private FileConfiguration config;
 
-    public ContractManager(PvpThings plugin) {
+    public Controller(PvpThings plugin) {
         this.plugin = plugin;
+
+        new Commands();
 
         file = new File(plugin.getDataFolder(), "contracts.yml");
 
@@ -27,6 +29,7 @@ public class ContractManager {
     }
     public void load(){
         contracts.clear();
+        
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -34,6 +37,7 @@ public class ContractManager {
                 e.printStackTrace();
             }
         }
+
         config = YamlConfiguration.loadConfiguration(file);
         Set<String> keys = config.getKeys(false);
         if (keys.isEmpty()) {
@@ -51,7 +55,7 @@ public class ContractManager {
         return contracts;
     }
     public void save(Contract contract){
-        config.set(contract.getHunted().toString(), contract);
+        config.set(contract.getId(), contract);
         try {
             config.save(file);
         } catch (Exception e) {
@@ -59,7 +63,13 @@ public class ContractManager {
         }
     }
     public void createContract(Player hunter, Player hunted, double reward){
-        Contract contract = new Contract(reward, hunted.getUniqueId(), hunter.getUniqueId());
+        String creator;
+        if (hunter == null) {
+            creator = "Server";
+        } else {
+            creator = hunter.getName();
+        }
+        Contract contract = new Contract(reward, hunted.getUniqueId(), creator);
         contracts.put(hunted.getUniqueId(), contract);
         save(contract);
     }

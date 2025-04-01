@@ -1,4 +1,4 @@
-package com.ar.askgaming.pvpthings.Utilities;
+package com.ar.askgaming.pvpthings.Utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

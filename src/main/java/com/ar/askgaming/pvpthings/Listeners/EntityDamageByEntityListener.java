@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
-import com.ar.askgaming.pvpthings.Commands.PvpManager;
+import com.ar.askgaming.pvpthings.PvpCombat.CombatController;
 
 public class EntityDamageByEntityListener implements Listener{
 
@@ -72,7 +72,7 @@ public class EntityDamageByEntityListener implements Listener{
             return;
         }
 
-        PvpManager manager = plugin.getPvpManager();
+        CombatController manager = plugin.getCombatController();
         if (e.isCancelled()){
             if (pDamaged.isInCombat() && pDamager.isInCombat()){
                 e.setCancelled(false);

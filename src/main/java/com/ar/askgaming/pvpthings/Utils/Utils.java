@@ -1,41 +1,38 @@
-package com.ar.askgaming.pvpthings.Utilities;
+package com.ar.askgaming.pvpthings.Utils;
 
 import java.util.List;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import com.ar.askgaming.pvpthings.PvpThings;
 
-public class Methods {
+public class Utils {
 
-    private PvpThings plugin;
-    public Methods(PvpThings plugin) {
-        this.plugin = plugin;
-    }
+    private static PvpThings plugin = PvpThings.getInstance();
 
-    public void listTops(List<String> list, String[] args, Player p, String type) {
+    public static void listPages(List<String> list, String[] args, CommandSender sender) {
         int page = 1;
         if (args.length > 2) {
             try {
                 page = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
-                p.sendMessage(plugin.getLang().get("commands.invalid_page", p));
+                sender.sendMessage(plugin.getLang().get("commands.invalid_page", sender));
                 return;
             }
         }
 
         int totalPages = (int) Math.ceil(list.size() / 10.0);
         if (page > totalPages || page < 1) {
-            p.sendMessage(plugin.getLang().get("commands.invalid_page", p));
+            sender.sendMessage(plugin.getLang().get("commands.invalid_page", sender));
             return;
         }
 
         int start = (page - 1) * 10;
         int end = Math.min(start + 10, list.size());
-        p.sendMessage(plugin.getLang().get("misc.tops", p).replace("{top}", type) + " " + page + "/" + totalPages);
+        sender.sendMessage(plugin.getLang().get("commands.listing", sender) + " " + page + "/" + totalPages);
         for (int i = start; i < end; i++) {
             String string = list.get(i);
-            p.sendMessage((i + 1) + ". " + string);
+            sender.sendMessage((i + 1) + ". " + string);
         }
     }
 }

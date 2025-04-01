@@ -3,8 +3,16 @@ leave_combat: "&aHas salido del combate."
 enter_combat: "&7Ahora estás en combate."
 death_logout: "&c{player} murió por desconectarse en combate."
 antipearl: "&cTeletransporte cancelado, proteccion de bug de perla."
+
 commands:
   invalid_page: "&cNúmero de página inválido."
+  invalid_number: "&cNúmero inválido."
+  player_not_found: "&cNo se encontró al jugador."
+  listing: "&7Listando "
 
-misc:
-  tops: "&7Estadísticas top: &a{top}, páginas: "
+contracts:
+  create:
+  list: "&7Lista de contratos:"
+  empty: "&cNo hay contratos activos."
+  hunted: "&7Buscado: &c"
+  prize: "&7Recompensa: &c"

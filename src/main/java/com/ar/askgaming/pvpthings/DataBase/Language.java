@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -12,7 +13,8 @@ import com.ar.askgaming.pvpthings.PvpThings;
 
 public class Language {
 
-    private File defaultLang;
+    private String defaultLang;
+    private File defaultFile;
     private HashMap<String, HashMap<String, String>> cache = new HashMap<>();
     
     private final PvpThings plugin;
@@ -20,29 +22,38 @@ public class Language {
         this.plugin = plugin;
 
         createFile("es");
-        // En must be at the end to be the default language
         createFile("en");    
     }
 
     private void createFile(String locale) {
-        defaultLang = new File(plugin.getDataFolder() + "/lang/" + locale + ".yml");
-        if (!defaultLang.exists()) {
+        File file = new File(plugin.getDataFolder() + "/lang/" + locale + ".yml");
+        if (!file.exists()) {
             plugin.saveResource("lang/" + locale + ".yml", false);
         }
     }
 
     public void load() {
+        defaultLang = plugin.getConfig().getString("default_lang", "en");
+        defaultFile = new File(plugin.getDataFolder() + "/lang/" + defaultLang + ".yml");
+        if (!defaultFile.exists()) {
+            plugin.getLogger().warning("Default language file not found, using English as default.");
+            defaultLang = "en";
+            defaultFile = new File(plugin.getDataFolder() + "/lang/en.yml");
+        }
         cache.clear();
     }
 
-    public String get(String path, Player p) {
-        String locale = (p == null) ? "en" : p.getLocale().split("_")[0];
+    public String get(String path, CommandSender sender) {
+        Player p = (sender instanceof Player) ? (Player) sender : null;
+
+        String locale = (p == null) ? defaultLang : p.getLocale().split("_")[0];
     
         // Si el idioma no existe, usar inglés como fallback inmediato
         File file = new File(plugin.getDataFolder() + "/lang/" + locale + ".yml");
         if (!file.exists()) {
-            locale = "en";
-            file = defaultLang;
+            plugin.getLogger().warning("Language file not found for " + locale + ", using English as fallback.");
+            locale = defaultLang;
+            file = defaultFile;
         }
     
         // Verificar caché
@@ -55,7 +66,7 @@ public class Language {
     
         // Si el mensaje no se encuentra en el archivo de idioma, obtener el de inglés
         if (required.startsWith("Error:")) {
-            required = loadMessage(defaultLang, path);
+            required = loadMessage(defaultFile, path);
         }
     
         // Guardar en caché

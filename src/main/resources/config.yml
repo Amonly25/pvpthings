@@ -1,0 +1,5 @@
+# Each language has its own language file, this allows you to send messages based on the language of the player's client. 
+# The file must be in the lang folder. You can add new ones using the ISO 639-1 country code, ask the AI ​​for help in any case.
+# If the language is not found or if there are global messages or messages to the console, the default language will be used.
+default_lang: "en"
+

@@ -1,4 +1,4 @@
-package com.ar.askgaming.pvpthings.Commands;
+package com.ar.askgaming.pvpthings.PvpCombat;
 
 import java.util.List;
 
@@ -9,16 +9,19 @@ import org.bukkit.entity.Player;
 
 import com.ar.askgaming.pvpthings.PvpThings;
 
-public class PvpCommand implements TabExecutor{
+public class Commands implements TabExecutor{
 
-    private PvpThings plugin;
-    public PvpCommand(PvpThings plugin) {
-        this.plugin = plugin;
+    private final PvpThings plugin;
+    public Commands() {
+        this.plugin = PvpThings.getInstance();
+        plugin.getServer().getPluginCommand("pvp").setExecutor(this);
     }
+
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         return List.of("spawn_dps_entity", "info", "despawn_dps_entity", "back","stats","tops");
     }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         

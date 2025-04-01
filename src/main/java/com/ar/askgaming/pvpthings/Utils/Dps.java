@@ -1,4 +1,4 @@
-package com.ar.askgaming.pvpthings.Utilities;
+package com.ar.askgaming.pvpthings.Utils;
 
 import java.util.HashMap;
 import java.util.List;

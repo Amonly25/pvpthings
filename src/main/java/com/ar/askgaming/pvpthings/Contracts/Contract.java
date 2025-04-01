@@ -7,15 +7,16 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public class Contract implements ConfigurationSerializable {
 
-    private Double price;
-    private UUID hunted, hunter;
+    private Double prize;
+    private UUID hunted;
+    private String creator;
     private Long createdTime;
     private String id;
 
-    public Contract(double price, UUID hunted, UUID hunter) {
-        this.price = price;
+    public Contract(double prize, UUID hunted, String creator) {
+        this.prize = prize;
         this.hunted = hunted;
-        this.hunter = hunter;
+        this.creator = creator;
         
         createdTime= System.currentTimeMillis();
         id = UUID.randomUUID().toString();
@@ -23,49 +24,41 @@ public class Contract implements ConfigurationSerializable {
     }
 
     public Contract(Map<String, Object> map) {
-        this.price = (double) map.get("price");
+        this.prize = (double) map.get("price");
         this.hunted = UUID.fromString((String) map.get("hunted"));
-        this.hunter = UUID.fromString((String) map.get("hunter"));
+        this.creator = (String) map.get("creator");
         this.createdTime = (long) map.get("time");
     }
 
     @Override
     public Map<String, Object> serialize() {
         return Map.of(
-            "price", price,
+            "price", prize,
             "hunted", hunted.toString(),
-            "hunter", hunter.toString(),
+            "hunter", creator,
             "time", createdTime
         );
     }
-    public double getPrice() {
-        return price;
+    public double getPrize() {
+        return prize;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPrize(double price) {
+        this.prize = price;
     }
 
     public UUID getHunted() {
         return hunted;
     }
 
-    public void setHunted(UUID hunted) {
-        this.hunted = hunted;
-    }
-
-    public UUID getHunter() {
-        return hunter;
-    }
-
-    public void setHunter(UUID hunter) {
-        this.hunter = hunter;
+    public String getCreator() {
+        return creator;
     }
 
     public Long getCreatedTime() {
         return createdTime;
     }
-
-    
-
+    public String getId() {
+        return id;
+    }
 }

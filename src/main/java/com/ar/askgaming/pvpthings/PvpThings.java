@@ -3,11 +3,8 @@ package com.ar.askgaming.pvpthings;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.ar.askgaming.pvpthings.Commands.PvpCommand;
-import com.ar.askgaming.pvpthings.Commands.PvpManager;
 import com.ar.askgaming.pvpthings.Contracts.Contract;
-import com.ar.askgaming.pvpthings.Contracts.ContractManager;
-import com.ar.askgaming.pvpthings.Contracts.ContractsCommand;
+import com.ar.askgaming.pvpthings.Contracts.Controller;
 import com.ar.askgaming.pvpthings.DataBase.DataManager;
 import com.ar.askgaming.pvpthings.DataBase.Language;
 import com.ar.askgaming.pvpthings.Listeners.EntityDamageByEntityListener;
@@ -16,20 +13,19 @@ import com.ar.askgaming.pvpthings.Listeners.PlayerListeners.PlayerCommandListene
 import com.ar.askgaming.pvpthings.Listeners.PlayerListeners.PlayerDeathListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerListeners.PlayerJoinListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerListeners.PlayerQuitListener;
-import com.ar.askgaming.pvpthings.Utilities.Dps;
-import com.ar.askgaming.pvpthings.Utilities.Methods;
-import com.ar.askgaming.pvpthings.Utilities.Recipes;
+import com.ar.askgaming.pvpthings.PvpCombat.CombatController;
+import com.ar.askgaming.pvpthings.Utils.Dps;
+import com.ar.askgaming.pvpthings.Utils.Recipes;
 
 public class PvpThings extends JavaPlugin {
     
     private static PvpThings instance;
 
-    private PvpManager pvpManager;
+    private CombatController combatController;
     private DataManager dataManager;
-    private Dps dspTest;
-    private ContractManager contractManager;
+    private Dps dspFeature;
+    private Controller contractController;
     private Language lang;
-    private Methods methods;
 
     public void onEnable() {
         
@@ -40,14 +36,11 @@ public class PvpThings extends JavaPlugin {
 
         dataManager = new DataManager();
         lang = new Language(this);
-        pvpManager = new PvpManager(this);
-        contractManager = new ContractManager(this);
-        dspTest = new Dps(this);
-        new Recipes(this);
-        methods = new Methods(this);
+        combatController = new CombatController(this);
+        contractController = new Controller(this);
+        dspFeature = new Dps(this);
 
-        getServer().getPluginCommand("pvp").setExecutor(new PvpCommand(this));
-        getServer().getPluginCommand("contract").setExecutor(new ContractsCommand(this));
+        new Recipes(this);
 
         new PlayerDeathListener(this);
         new PlayerQuitListener(this);
@@ -61,22 +54,20 @@ public class PvpThings extends JavaPlugin {
         getDps().remove();
     }
 
-    public PvpManager getPvpManager() {
-        return pvpManager;
+    public CombatController getCombatController() {
+        return combatController;
     }
     public Dps getDps() {
-        return dspTest;
+        return dspFeature;
     }
 
-    public ContractManager getContractManager() {
-        return contractManager;
+    public Controller getContractController() {
+        return contractController;
     }
     public Language getLang() {
         return lang;
     }
-    public Methods getMethods() {
-        return methods;
-    }
+
     public static PvpThings getInstance() {
         return instance;
     }

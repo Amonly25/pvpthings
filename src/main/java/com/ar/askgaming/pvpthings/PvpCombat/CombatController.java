@@ -1,4 +1,4 @@
-package com.ar.askgaming.pvpthings.Commands;
+package com.ar.askgaming.pvpthings.PvpCombat;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,17 +13,18 @@ import com.ar.askgaming.pvpthings.PvpThings;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class PvpManager extends BukkitRunnable{
+public class CombatController extends BukkitRunnable{
 
     private final HashMap<Player, Integer> lastCombat = new HashMap<>();
 
     private final PvpThings plugin;
 
-    public PvpManager(PvpThings plugin) {
+    public CombatController(PvpThings plugin) {
         this.plugin = plugin;
 
         runTaskTimer(plugin, 20L, 20L);
 
+        new Commands();
     }
 
     public void setLastCombat(Player p, int time){
