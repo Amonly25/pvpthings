@@ -39,7 +39,9 @@ command_blacklist:
 # If the player dies on their own, the contract will be lost.
 contracts:
   # Every 60 hours by default, a contract will be automatically created for the player with the longest time since their last death.
-  create_cooldown: 60 # In hours
+  create_cooldown: 3600 # In minutes
   # how long will the contract last
   duration: 60
-  mininum_price: 200 # Minimum price for a contract
+  default_prize: 200 # Default price for a contract
+  mininum_prize: 200 # Minimum price for a contract
+  last: 0 # Last contract created # DO NOT TOUCH THIS

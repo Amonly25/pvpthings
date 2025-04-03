@@ -23,7 +23,7 @@ public class PvpPlayer{
         this.inCombat = false;
         this.timeSinceDeath = timeSinceDeath;
 
-        this.kdr = (int) Math.round((double) kills / (deaths == 0 ? 1 : deaths));
+        this.kdr = 0;
 
         plugin.getServer().getScheduler().runTaskLater(plugin, 
         new Runnable() {
@@ -40,7 +40,7 @@ public class PvpPlayer{
             plugin.getLogger().warning("Skipping update for player " + uuid.toString() + " because they are not online.");
             return;
         }
-        kills = p.getStatistic(Statistic.KILL_ENTITY, EntityType.PLAYER);
+        kills = p.getStatistic(Statistic.PLAYER_KILLS);
         deaths = p.getStatistic(Statistic.DEATHS);
         timeSinceDeath = p.getStatistic(Statistic.TIME_SINCE_DEATH);
 
@@ -64,6 +64,18 @@ public class PvpPlayer{
     public void setTimeSinceDeath(int timeSinceDeath) {
         this.timeSinceDeath = timeSinceDeath;
     }
+    public String getTimeSinceDeathString() {
+        int seconds = timeSinceDeath / 20;
+        int minutes = seconds / 60;
+        int hours = minutes / 60;
+        seconds = seconds % 60;
+        minutes = minutes % 60;
+        hours = hours % 24;
+        if (hours > 0) {
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        }
+        return String.format("%02d:%02d", minutes, seconds);
+    }
 
     public int getKills() {
         return kills;
@@ -82,10 +94,7 @@ public class PvpPlayer{
     }
 
     public int getKdr() {
-        return kdr;
-    }
-    public void setKdr(int kdr) {
-        this.kdr = kdr;
+        return (int) Math.round((double) kills / (deaths == 0 ? 1 : deaths));
     }
 
     public boolean isInCombat() {

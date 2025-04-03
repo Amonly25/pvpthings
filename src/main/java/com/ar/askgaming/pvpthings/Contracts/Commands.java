@@ -17,8 +17,11 @@ import com.ar.askgaming.pvpthings.Utils.Utils;
 public class Commands implements TabExecutor {
 
     private final PvpThings plugin;
-    public Commands() {
+    private final Controller controller;
+    
+    public Commands(Controller controller) {
         this.plugin = PvpThings.getInstance();
+        this.controller = controller;
 
         plugin.getServer().getPluginCommand("contract").setExecutor(this);
     }
@@ -45,51 +48,84 @@ public class Commands implements TabExecutor {
         case "list":
             listContracts(sender,args);
             break;
+        case "add":
+            addToContract(sender, args);
+            break;
         default:
             break;
         }
        
         return false;
     }
-    //#region Create
-    public void createContract(CommandSender sender, String[] args) {
+
+    //#region Create and Add
+    public void handleContract(CommandSender sender, String[] args, boolean isCreate) {
         if (args.length < 3) {
-            sender.sendMessage("Usage: /contracts create <player> <amount>");
+            sender.sendMessage("Usage: /contracts " + (isCreate ? "create" : "add") + " <player> <amount>");
             return;
         }
+        
         Player target = plugin.getServer().getPlayer(args[1]);
         if (target == null) {
             sender.sendMessage(getLang("commands.player_not_found", sender));
             return;
         }
-        int amount = 0;
+        
+        int amount;
         try {
             amount = Integer.parseInt(args[2]);
         } catch (NumberFormatException e) {
             sender.sendMessage(getLang("commands.invalid_number", sender));
             return;
         }
+        
         if (amount <= 0) {
             sender.sendMessage(getLang("commands.invalid_number", sender));
             return;
         }
-        String creator = "Server";
+        Integer min = plugin.getConfig().getInt("contracts.mininum_prize", 200);
+        if (amount < min) {
+            sender.sendMessage(getLang("contracts.min_prize", sender).replace("{amount}", min+""));
+            return;
+        }
         
-        if (sender instanceof Player) {
-            Player p = (Player) sender;
-            if (target == sender) {
+        if (isCreate && controller.hasContract(target.getUniqueId())) {
+            sender.sendMessage(getLang("contracts.already_exist", sender));
+            return;
+        } else if (!isCreate && !controller.hasContract(target.getUniqueId())) {
+            sender.sendMessage(getLang("contracts.no_exists", sender));
+            return;
+        }
+        
+        String creator = "Server";
+        if (sender instanceof Player p) {
+            if (target.equals(sender)) return;
+            if (!Utils.hasMoney(p, amount)) {
+                sender.sendMessage(getLang("commands.not_enough_money", sender));
                 return;
             }
             creator = p.getName();
         }
-
-        plugin.getContractController().createContract(creator, target, amount);
-
+        
+        if (isCreate) {
+            controller.createContract(creator, target.getUniqueId(), amount);
+        } else {
+            controller.addContractor(target.getUniqueId(), creator, amount);
+        }
     }
+    
+    public void createContract(CommandSender sender, String[] args) {
+        handleContract(sender, args, true);
+    }
+    
+    public void addToContract(CommandSender sender, String[] args) {
+        handleContract(sender, args, false);
+    }
+    
     //#region List
     public void listContracts(CommandSender sender, String[] args) {
 
-        HashMap<UUID, Contract> contracts = plugin.getContractController().getContracts();
+        HashMap<UUID, Contract> contracts = controller.getContracts();
 
         if (contracts.isEmpty()) {
             sender.sendMessage(getLang("contracts.empty", sender));

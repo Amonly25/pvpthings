@@ -23,6 +23,8 @@ public class Language {
 
         createFile("es");
         createFile("en");    
+
+        load();
     }
 
     private void createFile(String locale) {

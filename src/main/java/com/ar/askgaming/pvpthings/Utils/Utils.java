@@ -39,7 +39,7 @@ public class Utils {
             sender.sendMessage((i + 1) + ". " + string);
         }
     }
-    public static boolean hasMoney(Player player, Double amount){
+    public static boolean hasMoney(Player player, Integer amount){
         
         if (plugin.getRealisticEconomy() != null){
             RealisticEconomy economy = plugin.getRealisticEconomy();
@@ -51,7 +51,7 @@ public class Utils {
         player.sendMessage("No economy plugin found, please contact the server admin.");
         return false;
     }
-    public static boolean removeMoney(Player player, Double amount){
+    public static boolean removeMoney(Player player, Integer amount){
         if (plugin.getRealisticEconomy() != null){
             RealisticEconomy economy = plugin.getRealisticEconomy();
             return economy.getServerBank().transferWithPlayer(player.getUniqueId(), amount, false);
@@ -61,5 +61,14 @@ public class Utils {
             return r.transactionSuccess();
         }
         return false;
+    }
+    public static void addMoney(Player player, Integer amount){
+        if (plugin.getRealisticEconomy() != null){
+            RealisticEconomy economy = plugin.getRealisticEconomy();
+            economy.getServerBank().transferWithPlayer(player.getUniqueId(), amount, true);
+        }
+        if (plugin.getVaultEconomy() != null){
+            plugin.getVaultEconomy().depositPlayer(player, amount);
+        }
     }
 }

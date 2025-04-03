@@ -9,10 +9,26 @@ commands:
   invalid_number: "&cNúmero inválido."
   player_not_found: "&cNo se encontró al jugador."
   listing: "&7Listando "
+  not_enough_money: "&cNo tienes suficiente dinero."
+
+stats:
+  kills: "&7Asesinatos: &c
+  deaths: "&7Muertes: &c"
+  kdr: "&7KDR: &c"
+  kills_streak: "&7Racha: &c"
+  highest_killstreak: "&7Máxima racha: &c"
+  time_since_death: "&7Última muerte: &c"
 
 contracts:
-  create:
+  created: "&7{creator} creo contrato para cazar a &c{player} &7por &c{price}."
+  claimed: "&7{killer} ha reclamado el contrato de &c{player} &7por &c{price}."
   list: "&7Lista de contratos:"
   empty: "&cNo hay contratos activos."
   hunted: "&7Buscado: &c"
   prize: "&7Recompensa: &c"
+  no_exists: "&cNo existe un contrato para este jugador."
+  already_exists: "&cYa existe un contrato para este jugador."
+  expired: "&cEl contrato sobre {player} ha expirado, ha ganado el dinero."
+  reward: "&7Has ganado &c{money} &7por un contrato."
+  died: "&c{player} ha muerto, el contrato ha perdido su validez."
+  min_prize: "&cEl precio mínimo para un contrato es de {amount}."

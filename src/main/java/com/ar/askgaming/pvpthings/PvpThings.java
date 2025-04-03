@@ -13,6 +13,7 @@ import com.ar.askgaming.pvpthings.Listeners.PlayerListeners.PlayerDeathListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerListeners.PlayerJoinListener;
 import com.ar.askgaming.pvpthings.Listeners.PlayerListeners.PlayerQuitListener;
 import com.ar.askgaming.pvpthings.PvpCombat.CombatController;
+import com.ar.askgaming.pvpthings.PvpCombat.TopManager;
 import com.ar.askgaming.pvpthings.Utils.Dps;
 import com.ar.askgaming.pvpthings.Utils.Recipes;
 import com.ar.askgaming.realisticeconomy.RealisticEconomy;
@@ -28,6 +29,7 @@ public class PvpThings extends JavaPlugin {
     private Dps dspFeature;
     private Controller contractController;
     private Language lang;
+    private TopManager topManager;
 
     private Economy vaultEconomy;
     private RealisticEconomy realisticEconomy;
@@ -42,6 +44,7 @@ public class PvpThings extends JavaPlugin {
         combatController = new CombatController(this);
         contractController = new Controller(this);
         dspFeature = new Dps(this);
+        topManager = new TopManager();
 
         new Recipes(this);
 
@@ -60,7 +63,6 @@ public class PvpThings extends JavaPlugin {
             RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
             if (rsp == null) {
                 getLogger().info("Non economy plugin found!");
-                //getServer().getPluginManager().disablePlugin(this);
             } else {
                 vaultEconomy = rsp.getProvider();
                 getLogger().info("Vault Economy found!");
@@ -101,5 +103,8 @@ public class PvpThings extends JavaPlugin {
     }
     public RealisticEconomy getRealisticEconomy() {
         return realisticEconomy;
+    }
+    public TopManager getTopManager() {
+        return topManager;
     }
 }

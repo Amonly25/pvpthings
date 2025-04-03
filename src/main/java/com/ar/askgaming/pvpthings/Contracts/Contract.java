@@ -6,44 +6,47 @@ import java.util.UUID;
 
 public class Contract{
 
-    private Double prize;
+    private Integer prize;
     private UUID hunted;
-    private List<String> creators = new ArrayList<>();
+    private List<String> contractors = new ArrayList<>();
     private Long createdTime;
     private String id;
 
-    public Contract(double prize, UUID hunted, String creator) {
+    public Contract(Integer prize, UUID hunted, String creator) {
         this.prize = prize;
         this.hunted = hunted;
-        this.creators.add(creator);
+        this.contractors.add(creator);
         
         createdTime= System.currentTimeMillis();
         id = UUID.randomUUID().toString();
 
     }
-    public Contract(String id, double prize, UUID hunted, String creator, long createdTime) {
+    public Contract(String id, Integer prize, UUID hunted, String creator, long createdTime) {
         this.id = id;
         this.prize = prize;
         this.hunted = hunted;
         this.createdTime = createdTime;
-        this.creators.add(creator);
+        this.contractors.add(creator);
     }
 
-    public double getPrize() {
+    public Integer getPrize() {
         return prize;
     }
 
-    public void setPrize(double price) {
+    public void setPrize(Integer price) {
         this.prize = price;
     }
 
     public UUID getHunted() {
         return hunted;
     }
+    public boolean existContract(UUID hunted) {
+        return this.hunted.equals(hunted);
+    }
 
-    public String getCreators() {
+    public String getContractors() {
         StringBuilder sb = new StringBuilder();
-        for (String creator : creators) {
+        for (String creator : contractors) {
             sb.append(creator).append(", ");
         }
         if (sb.length() > 0) {
@@ -51,8 +54,8 @@ public class Contract{
         }
         return sb.toString();
     }
-    public void addCreator(String creator) {
-        this.creators.add(creator);
+    public void addContractor(String creator) {
+        this.contractors.add(creator);
     }
 
     public Long getCreatedTime() {

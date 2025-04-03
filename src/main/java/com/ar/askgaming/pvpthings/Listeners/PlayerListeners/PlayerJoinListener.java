@@ -19,7 +19,9 @@ public class PlayerJoinListener implements Listener{
     public void onPlayerJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
         plugin.getDataManager().loadOrCreatePvpPlayer(p.getUniqueId(), pvpPlayer -> {
-            
+            if (pvpPlayer != null) {
+            }
         });
+        plugin.getContractController().updateDeathTime(p);
     }
 }
