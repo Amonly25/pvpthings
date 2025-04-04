@@ -15,7 +15,7 @@ stats:
   kills: "&7Asesinatos: &c
   deaths: "&7Muertes: &c"
   kdr: "&7KDR: &c"
-  kills_streak: "&7Racha: &c"
+  killstreak: "&7Racha: &c"
   highest_killstreak: "&7Máxima racha: &c"
   time_since_death: "&7Última muerte: &c"
 

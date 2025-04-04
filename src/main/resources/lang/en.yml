@@ -1,10 +1,34 @@
 in_combat: "&7In combat for &c{time}s"
-leave_combat: "&aYou leave from combat."
-enter_combat: "&7You are in combat now."
-death_logout: "&c{player} died from disconnecting in combat."
-antipearl: "&cTeleport cancelled, anti pearl exploit."
+leave_combat: "&aYou have left combat."
+enter_combat: "&7You are now in combat."
+death_logout: "&c{player} died by logging out during combat."
+antipearl: "&cTeleportation canceled, pearl bug protection."
+
 commands:
   invalid_page: "&cInvalid page number."
-  blacklist: "&cYou can't use this command while in combat!"
-misc:
-  tops: "&7Top stats: &a{top}, pages: "
+  invalid_number: "&cInvalid number."
+  player_not_found: "&cPlayer not found."
+  listing: "&7Listing "
+  not_enough_money: "&cYou don't have enough money."
+
+stats:
+  kills: "&7Kills: &c"
+  deaths: "&7Deaths: &c"
+  kdr: "&7KDR: &c"
+  killstreak: "&7Killstreak: &c"
+  highest_killstreak: "&7Highest killstreak: &c"
+  time_since_death: "&7Last death: &c"
+
+contracts:
+  created: "&7{creator} created a contract to hunt &c{player} &7for &c{price}."
+  claimed: "&7{killer} has claimed the contract on &c{player} &7for &c{price}."
+  list: "&7Contract list:"
+  empty: "&cThere are no active contracts."
+  hunted: "&7Target: &c"
+  prize: "&7Reward: &c"
+  no_exists: "&cNo contract exists for this player."
+  already_exists: "&cA contract for this player already exists."
+  expired: "&cThe contract on {player} has expired, they received the money."
+  reward: "&7You have earned &c{money} &7from a contract."
+  died: "&c{player} has died, the contract is now invalid."
+  min_prize: "&cThe minimum price for a contract is {amount}."
