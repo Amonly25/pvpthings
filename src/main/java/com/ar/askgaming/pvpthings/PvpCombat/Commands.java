@@ -2,7 +2,6 @@ package com.ar.askgaming.pvpthings.PvpCombat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.OfflinePlayer;
@@ -28,6 +27,7 @@ public class Commands implements TabExecutor{
             List<String> commands = new ArrayList<>(List.of("stats","tops"));
             if (sender.hasPermission("pvpthings.admin")) {
                 commands.add("dps_entity");
+                commands.add("reload");
             }
             return commands;
         }
@@ -67,12 +67,16 @@ public class Commands implements TabExecutor{
             case "top":
                 tops(p, args);
                 break;
+            case "reload":
+                reload(p, args);
+                break;
             default:
                 p.sendMessage("§cUnknown command.");
                 break;
         }
         return false;
     }
+    //#region Dps
     public void dpsEntity(Player p, String[] args) {
         if (!p.hasPermission("pvpthings.admin")) {
             p.sendMessage("§cYou don't have permission to use this command.");
@@ -101,7 +105,7 @@ public class Commands implements TabExecutor{
                 break;
         }
     }
-
+    //#region Stats
     public void stats(Player p, String[] args) {
         PvpPlayer pvp = plugin.getDataManager().getPvpPlayer(p.getUniqueId());
         if (pvp == null) {
@@ -115,7 +119,7 @@ public class Commands implements TabExecutor{
         p.sendMessage(getLang("stats.highest_killstreak", p) + pvp.getHighestKillstreak());
         p.sendMessage(getLang("stats.time_since_death", p) + pvp.getTimeSinceDeathString());
     }
-
+    //#region Tops
     public void tops(Player p, String[] args) {
         if (args.length < 2) {
             p.sendMessage("Usage: /pvp tops <kills/deaths/killstreak/kdr>");
@@ -151,5 +155,16 @@ public class Commands implements TabExecutor{
                 p.sendMessage("Usage: /pvp tops <kills/deaths/killstreak/kdr>");
                 break;
         }
+    }
+    //#region reload
+    private void reload(Player p, String[] args) {
+        if (!p.hasPermission("pvpthings.admin")) {
+            p.sendMessage("§cYou don't have permission to use this command.");
+            return;
+        }
+        plugin.reloadConfig();
+        plugin.getDps().load();
+        plugin.getLang().load();
+        p.sendMessage("§aConfig reloaded.");
     }
 }

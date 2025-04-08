@@ -17,6 +17,8 @@ import com.ar.askgaming.pvpthings.PvpCombat.TopManager;
 import com.ar.askgaming.pvpthings.Utils.Dps;
 import com.ar.askgaming.pvpthings.Utils.Recipes;
 import com.ar.askgaming.realisticeconomy.RealisticEconomy;
+import com.ar.askgaming.realisticeconomy.Utilities.PlaceHolders;
+import com.ar.askgaming.universalnotifier.UniversalNotifier;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -33,6 +35,7 @@ public class PvpThings extends JavaPlugin {
 
     private Economy vaultEconomy;
     private RealisticEconomy realisticEconomy;
+    private UniversalNotifier universalNotifier;
 
     public void onEnable() {
         
@@ -58,6 +61,16 @@ public class PvpThings extends JavaPlugin {
         if (getServer().getPluginManager().isPluginEnabled("RealisticEconomy")) {
             getLogger().info("RealisticEconomy found!");
             realisticEconomy = RealisticEconomy.getInstance();
+        }
+        if (getServer().getPluginManager().isPluginEnabled("PlaceHolderAPI")) {
+            getLogger().info("PlaceHolderAPI found!");
+            new PlaceHolders();
+        }
+        if (getServer().getPluginManager().isPluginEnabled("UniversalNotifier")) {
+            getLogger().info("UniversalNotifier found!");
+            universalNotifier = UniversalNotifier.getInstance();
+        } else {
+            getLogger().info("UniversalNotifier not found!");
         }
         if (getServer().getPluginManager().isPluginEnabled("Vault")) {
             RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
@@ -106,5 +119,8 @@ public class PvpThings extends JavaPlugin {
     }
     public TopManager getTopManager() {
         return topManager;
+    }
+    public UniversalNotifier getUniversalNotifier() {
+        return universalNotifier;
     }
 }

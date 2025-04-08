@@ -21,6 +21,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class Dps {
 
     private final PvpThings plugin;
+    private final Map<Player, Long> lastUpdateTime = new HashMap<>();
+    private Entity dpsEntity;
+    private String name;
+    private Location loc;
+    
     public Dps(PvpThings plugin) {
         this.plugin = plugin;
 
@@ -35,11 +40,6 @@ public class Dps {
         spawn(loc);
 
     }
-
-    private final Map<Player, Long> lastUpdateTime = new HashMap<>();
-    private Entity dpsEntity;
-    private String name;
-    private Location loc;
 
     public Entity getDpsEntity() {
         return dpsEntity;

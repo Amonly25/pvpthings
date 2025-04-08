@@ -3,17 +3,17 @@ package com.ar.askgaming.pvpthings;
 import java.util.UUID;
 
 import org.bukkit.Statistic;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 public class PvpPlayer{
 
     private PvpThings plugin = PvpThings.getInstance();
 
-    private Integer kills, deaths, killstreak, highestKillstreak, kdr, timeSinceDeath;
+    private Integer kills, deaths, killstreak, highestKillstreak, timeSinceDeath;
   
     private Boolean inCombat;
     private UUID uuid;
+
     public PvpPlayer(UUID uuid, Integer kills, Integer deaths, Integer killstreak, Integer highestKillstreak, Integer timeSinceDeath) {
         this.uuid = uuid;
         this.kills = kills;
@@ -22,8 +22,6 @@ public class PvpPlayer{
         this.highestKillstreak = highestKillstreak;
         this.inCombat = false;
         this.timeSinceDeath = timeSinceDeath;
-
-        this.kdr = 0;
 
         plugin.getServer().getScheduler().runTaskLater(plugin, 
         new Runnable() {
