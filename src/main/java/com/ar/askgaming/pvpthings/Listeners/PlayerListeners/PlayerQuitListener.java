@@ -29,7 +29,7 @@ public class PlayerQuitListener implements Listener {
                 player.getWorld().strikeLightningEffect(player.getLocation());
                 p.setInCombat(false);
                 Bukkit.getOnlinePlayers().forEach(pl ->{
-                    pl.sendMessage(plugin.getLang().get("death_logout",pl));
+                    pl.sendMessage(plugin.getLang().get("death_logout",pl).replace("{player}", player.getName()));
                 });
             } 
         }
