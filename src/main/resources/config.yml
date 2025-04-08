@@ -45,3 +45,9 @@ contracts:
   default_prize: 200 # Default price for a contract
   mininum_prize: 200 # Minimum price for a contract
   last: 0 # Last contract created # DO NOT TOUCH THIS
+
+# Only if UniversalNotifier is installed
+# This is usefull to send notificaions via telegram, discord or email
+# https://builtbybit.com/resources/universalnotifier-broadcast-alerts.62960/
+notifier:
+  created: "🔪 New contract hanging over {player}'s head, hunt him down!"

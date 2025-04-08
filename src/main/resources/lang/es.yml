@@ -20,8 +20,8 @@ stats:
   time_since_death: "&7Última muerte: &c"
 
 contracts:
-  created: "&7{creator} creo contrato para cazar a &c{player} &7por &c{price}."
-  claimed: "&7{killer} ha reclamado el contrato de &c{player} &7por &c{price}."
+  created: "&7{creator} creo contrato para cazar a &c{player} &7por &c{prize}."
+  claimed: "&7{killer} ha reclamado el contrato de &c{player} &7por &c{prize}."
   list: "&7Lista de contratos:"
   empty: "&cNo hay contratos activos."
   hunted: "&7Buscado: &c"

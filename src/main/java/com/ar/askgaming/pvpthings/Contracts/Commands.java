@@ -41,6 +41,11 @@ public class Commands implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
        
+        if (args.length == 0) {
+            sender.sendMessage("Usage: /contract <create|list|add>");
+            return true;
+        }
+
         switch (args[0].toLowerCase()) {
         case "create":
             createContract(sender, args);
@@ -51,13 +56,15 @@ public class Commands implements TabExecutor {
         case "add":
             addToContract(sender, args);
             break;
+        case "compare_now":
+            controller.createAutoContracts();
+            break;
         default:
             break;
         }
        
         return false;
     }
-
     //#region Create and Add
     public void handleContract(CommandSender sender, String[] args, boolean isCreate) {
         if (args.length < 3) {

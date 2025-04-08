@@ -11,9 +11,8 @@ public class Task extends BukkitRunnable{
     private final Controller controller;
 
     private Integer contractDuration;
-    private Integer createCooldown;
+
     private Integer lastCreateTime;
-    private Integer defaultPrize;
 
     public Task() {
         this.plugin = PvpThings.getInstance();
@@ -26,9 +25,7 @@ public class Task extends BukkitRunnable{
 
     public void load() {
         contractDuration = plugin.getConfig().getInt("contracts.duration", 60);
-        createCooldown = plugin.getConfig().getInt("contracts.create_cooldown", 60);
         lastCreateTime = plugin.getConfig().getInt("contracts.last", 0);
-        defaultPrize = plugin.getConfig().getInt("contracts.default_prize", 200);
     }
 
     @Override
@@ -38,9 +35,7 @@ public class Task extends BukkitRunnable{
             plugin.getConfig().set("contracts.last", lastCreateTime);
             plugin.saveConfig();
         } else{
-            controller.createContract("Server", controller.getMostTimeSinceDeath(), defaultPrize);
-            plugin.getConfig().set("contracts.last", createCooldown);
-            plugin.saveConfig();
+            controller.createAutoContracts();
         }
         controller.getContracts().forEach((uuid, contract) -> {
             if (System.currentTimeMillis() - contract.getCreatedTime() > contractDuration * 60 * 1000) {
@@ -48,7 +43,7 @@ public class Task extends BukkitRunnable{
                 for (Player pl : plugin.getServer().getOnlinePlayers()) {
                     pl.sendMessage(plugin.getLang().get("contracts.expired", pl).replace("{player}", contract.getHunted().toString()));
                 }
-                controller.removeContract(uuid);
+                controller.removeContract(contract);
             }
         });  
     }

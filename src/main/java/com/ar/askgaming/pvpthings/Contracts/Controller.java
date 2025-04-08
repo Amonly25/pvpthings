@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import com.ar.askgaming.pvpthings.PvpPlayer;
 import com.ar.askgaming.pvpthings.PvpThings;
 import com.ar.askgaming.pvpthings.Utils.Utils;
+import com.ar.askgaming.universalnotifier.Managers.AlertManager.Alert;
 
 public class Controller {
 
@@ -21,6 +23,7 @@ public class Controller {
     private final HashMap<UUID, Contract> contracts = new HashMap<>();
     private final File file;
     private FileConfiguration config;
+    private Integer createCooldown, defaultPrize;
 
     public Controller(PvpThings plugin) {
         this.plugin = plugin;
@@ -33,6 +36,9 @@ public class Controller {
     }
     public void load(){
         contracts.clear();
+
+        createCooldown = plugin.getConfig().getInt("contracts.create_cooldown", 60);
+        defaultPrize = plugin.getConfig().getInt("contracts.default_prize", 200);
         
         if (!file.exists()) {
             try {
@@ -48,10 +54,13 @@ public class Controller {
             return;
         }
         for (String key : keys) {
+            if (key.equals("death_times")) {
+                continue;
+            }
             String id = key;
             Integer prize = config.getInt(key + ".prize");
             UUID hunted = UUID.fromString(config.getString(key + ".hunted"));
-            String creator = config.getString(key + ".creator");
+            String creator = config.getString(key + ".contractors");
             long createdTime = config.getLong(key + ".createdTime");
 
             Contract contract = new Contract(id, prize, hunted, creator, createdTime);
@@ -61,21 +70,34 @@ public class Controller {
     public HashMap<UUID, Contract> getContracts() {
         return contracts;
     }
-    public void save(){
+    private void save(){
         try {
             config.save(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    private void saveContract(Contract contract) {
+        config.set(contract.getId() + ".prize", contract.getPrize());
+        config.set(contract.getId() + ".hunted", contract.getHunted().toString());  
+        config.set(contract.getId() + ".contractors", contract.getContractors());
+        config.set(contract.getId() + ".createdTime", contract.getCreatedTime());
+        save();
+    }
     //#region create
     public void createContract(String creator, UUID hunted, Integer prize){
         Contract contract = new Contract(prize, hunted, creator);
         contracts.put(hunted, contract);
-        config.set(contract.getId(), contract);
-        save();
+        saveContract(contract);
+        OfflinePlayer huntedPlayer = plugin.getServer().getOfflinePlayer(hunted);
+        String huntedName = huntedPlayer.getName() != null ? huntedPlayer.getName() : "Unknown";
         for (Player pl : plugin.getServer().getOnlinePlayers()) {
-            pl.sendMessage(plugin.getLang().get("contracts.created", pl).replace("{player}", contract.getHunted().toString()).replace("{prize}", prize+"").replace("{creator}", creator));
+            pl.sendMessage(plugin.getLang().get("contracts.created", pl).replace("{player}", huntedName).replace("{prize}", prize+"").replace("{creator}", creator));
+        }
+        if (plugin.getUniversalNotifier() != null) {
+            String message = plugin.getConfig().getString("notifier.created").replace("{player}", huntedName).replace("{prize}", prize+"");  
+            plugin.getUniversalNotifier().getNotificationManager().broadcastToAll(Alert.CUSTOM, message);
+
         }
     }
     public boolean hasContract(UUID uuid) {
@@ -92,14 +114,11 @@ public class Controller {
             save();
         }
     }
-    public void removeContract(UUID uuid) {
-        contracts.remove(uuid);
-        config.set(uuid.toString(), null);
-        try {
-            config.save(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    //#region remove
+    public void removeContract(Contract contract) {
+        contracts.remove(contract.getHunted());
+        config.set(contract.getId(), null);
+        save();
     }
     public void updateDeathTime(Player player){
         PvpPlayer pvpPlayer = plugin.getDataManager().getPvpPlayer(player.getUniqueId());
@@ -150,5 +169,10 @@ public class Controller {
         Integer timeSinceDeath = player.getStatistic(Statistic.TIME_SINCE_DEATH);
         config.set("death_times." + player.getUniqueId().toString(), timeSinceDeath);
         save();
+    }
+    public void createAutoContracts() {
+        createContract("Server", getMostTimeSinceDeath(), defaultPrize);
+        plugin.getConfig().set("contracts.last", createCooldown);
+        plugin.saveConfig();
     }
 }   

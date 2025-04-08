@@ -91,8 +91,8 @@ public class PvpPlayer{
         return highestKillstreak;
     }
 
-    public int getKdr() {
-        return (int) Math.round((double) kills / (deaths == 0 ? 1 : deaths));
+    public double getKdr() {
+        return (deaths == 0) ? kills : (double) kills / deaths;
     }
 
     public boolean isInCombat() {

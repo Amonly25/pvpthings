@@ -148,7 +148,8 @@ public class Commands implements TabExecutor{
             case "kdr":
                 plugin.getTopManager().getTopKdr().forEach((uuid, kdr) -> {
                     OfflinePlayer offlinePlayer = plugin.getServer().getOfflinePlayer(uuid);
-                    p.sendMessage("§a" + offlinePlayer.getName() + " §7- §a" + kdr);
+                    String value = String.format("%.2f", kdr);
+                    p.sendMessage("§a" + offlinePlayer.getName() + " §7- §a" + value);
                 });
                 break;
             default:

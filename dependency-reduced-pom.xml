@@ -59,6 +59,12 @@
       <version>2.11.6</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.Amonly25</groupId>
+      <artifactId>universalnotifier</artifactId>
+      <version>-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <properties>
     <maven.compiler.target>17</maven.compiler.target>

@@ -31,11 +31,16 @@ public class PlayerDeathListener implements Listener{
             PvpPlayer playerKiller = plugin.getDataManager().getPvpPlayer(killer.getUniqueId());
             if (playerKiller != null) {
                 playerKiller.checkAndUpdateData();
+                playerKiller.setKillstreak(playerKiller.getKillstreak() + 1);
+                if (playerKiller.getKillstreak() > playerKiller.getHighestKillstreak()) {
+                    playerKiller.setHighestKillstreak(playerKiller.getKillstreak());
+                }
             }
         }
 
         if (controller.hasContract(p.getUniqueId())) {
             Contract contract = controller.getContracts().get(p.getUniqueId());
+            plugin.getContractController().removeContract(contract);
 
             if (killer != null) {
                 controller.rewardContract(killer.getUniqueId(), contract);
@@ -47,7 +52,6 @@ public class PlayerDeathListener implements Listener{
                     pl.sendMessage(plugin.getLang().get("contracts.died", pl).replace("{player}", p.getName()));
                 }
             }
-            plugin.getContractController().removeContract(p.getUniqueId());
         }
         
         controller.updateDeathTime(p);
@@ -55,6 +59,8 @@ public class PlayerDeathListener implements Listener{
         PvpPlayer pvpPlayer = plugin.getDataManager().getPvpPlayer(p.getUniqueId());
         if (pvpPlayer == null) return;
         pvpPlayer.checkAndUpdateData();
+        pvpPlayer.setKillstreak(0);
+        pvpPlayer.setHighestKillstreak(0);
         pvpPlayer.setInCombat(false);
 
     }
